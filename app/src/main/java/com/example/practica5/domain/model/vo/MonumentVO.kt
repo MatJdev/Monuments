@@ -1,5 +1,7 @@
 package com.example.practica5.domain.model.vo
 
+import java.io.Serializable
+
 data class MonumentVO(
     val id: Long = 0,
     val name: String = "",
@@ -13,4 +15,4 @@ data class MonumentVO(
     val isFromMyMonuments: Boolean = false,
     val countryFlag: String = "",
     val isFavorite: Boolean = false
-)
+) : Serializable

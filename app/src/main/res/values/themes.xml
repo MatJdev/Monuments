@@ -28,6 +28,7 @@
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:statusBarColor">@color/md_theme_dark_secondaryContainer</item>
+        <item name="windowActionBar">false</item>
     </style>
 
     <style name="Theme.Practica5.NoActionBar">
@@ -53,4 +54,7 @@
         <item name="android:button">@null</item>
     </style>
 
+    <style name="TransparentTitleText" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@android:color/transparent</item>
+    </style>
 </resources>

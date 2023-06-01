@@ -2,10 +2,8 @@ package com.example.practica5.ui.fragments.monuments
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -15,16 +13,19 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import androidx.activity.addCallback
+import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.practica5.R
@@ -32,13 +33,16 @@ import com.example.practica5.databinding.FragmentMonumentsBinding
 import com.example.practica5.domain.model.vo.MonumentVO
 import com.example.practica5.ui.adapter.CountryAdapter
 import com.example.practica5.ui.adapter.MonumentsListAdapter
+import com.example.practica5.ui.fragments.detail.DetailViewModel
+import com.example.practica5.utils.MonumentsConstant
 import com.example.practica5.utils.MonumentsConstant.FIRST_LIST_POSITION
+import com.example.practica5.utils.MonumentsConstant.MONUMENTS_TITLE
 import com.example.practica5.utils.MonumentsConstant.MONUMENT_ID
 import com.example.practica5.utils.MonumentsConstant.MONUMENT_NAME
 import com.example.practica5.utils.MonumentsConstant.SORTED_EAST_WEST
 import com.example.practica5.utils.MonumentsConstant.SORTED_NORTH_SOUTH
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import java.io.Serializable
 
 class MonumentsFragment : Fragment() {
 
@@ -53,6 +57,7 @@ class MonumentsFragment : Fragment() {
             { monument -> onFavoriteSelected(monument) }
         )
     }
+    private val detailViewModel: DetailViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,11 +77,24 @@ class MonumentsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (requireActivity() as AppCompatActivity).supportActionBar?.show()
+        val mainToolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
+        (activity as? AppCompatActivity)?.let { activity ->
+            activity.setSupportActionBar(mainToolbar)
+            activity.supportActionBar?.show()
+            activity.onBackPressedDispatcher.addCallback(viewLifecycleOwner){}
+        }
+        mainToolbar.title = MONUMENTS_TITLE
         monumentsViewModel.monumentsListLiveData.observe(viewLifecycleOwner) { monuments ->
             adapter.submitList(monuments) { scrollToFirstPosition() }
         }
         initToolbarMenu()
+        binding?.let {
+            with(it){
+                monumentsFab.setOnClickListener {
+                    findNavController().navigate(R.id.action_nav_monuments_to_mapsFragment)
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -89,7 +107,8 @@ class MonumentsFragment : Fragment() {
     }
 
     private fun onClickItemSelected(monument: MonumentVO) {
-
+        detailViewModel.loadData(monument)
+        findNavController().navigate(R.id.action_nav_monuments_to_detailFragment)
     }
 
     private fun scrollToFirstPosition() {

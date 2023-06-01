@@ -11,4 +11,10 @@ object MonumentsConstant {
     const val SORTED_EAST_WEST = "eToW"
     const val ALL_COUNTRIES = "Todos los países"
     const val DATABASE_NAME = "monuments_dataBase"
+    const val EMPTY_INFO = ""
+    const val LOCATION_PERMISSION_REQUEST_CODE = 123
+    const val MONUMENTS_TITLE = "Monuments"
+    const val DENIED_PERMISSIONS = "Permiso de ubicación denegado"
+    const val EMAIL_SUBJECT = "Aprueba Historia"
+    const val MONUMENT_TARGET = "monumentTarget"
 }

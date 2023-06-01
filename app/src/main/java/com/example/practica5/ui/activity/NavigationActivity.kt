@@ -33,7 +33,7 @@ class NavigationActivity : AppCompatActivity() {
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_monuments, R.id.nav_favorites, R.id.nav_my_monuments
+                R.id.nav_monuments, R.id.nav_favorites, R.id.nav_my_monuments, R.id.mapsFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

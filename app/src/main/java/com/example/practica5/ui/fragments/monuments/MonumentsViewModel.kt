@@ -87,4 +87,8 @@ class MonumentsViewModel(application: Application) : AndroidViewModel(applicatio
             }
         }
     }
+
+    fun getMonumentByTitle(title: String): MonumentVO? {
+        return monumentsListLiveData.value?.find { monument -> monument.name == title }
+    }
 }

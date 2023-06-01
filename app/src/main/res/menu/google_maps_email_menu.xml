@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_google_maps"
+        android:checkable="true"
+        android:checked="true"
+        android:icon="@drawable/ic__web_monument_google_maps"
+        android:title="@string/webMonument__google_maps"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_email"
+        android:checkable="true"
+        android:icon="@drawable/ic__web_monument_email_24"
+        android:title="@string/webMonument__email"
+        app:showAsAction="ifRoom" />
+</menu>

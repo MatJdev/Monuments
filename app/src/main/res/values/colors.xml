@@ -65,4 +65,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#C1AE03</color>
     <color name="md_theme_light_toolbar">#99A6BC</color>
+    <color name="md_theme_light_gray">#E1E3E4</color>
 </resources>
