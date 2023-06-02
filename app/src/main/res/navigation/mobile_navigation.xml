@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/launcherFragment">
+
+    <fragment
+        android:id="@+id/nav_monuments"
+        android:name="com.example.practica5.ui.fragments.monuments.MonumentsFragment"
+        android:label="@string/menu_monuments"
+        tools:layout="@layout/fragment_monuments" />
+
+    <fragment
+        android:id="@+id/nav_favorites"
+        android:name="com.example.practica5.ui.fragments.favorites.FavoritesFragment"
+        android:label="@string/menu_favorites"
+        tools:layout="@layout/fragment_favorites" />
+
+    <fragment
+        android:id="@+id/nav_my_monuments"
+        android:name="com.example.practica5.ui.fragments.mymonuments.MyMonumentsFragment"
+        android:label="@string/menu_my_monuments"
+        tools:layout="@layout/fragment_mymonuments" />
+    <fragment
+        android:id="@+id/launcherFragment"
+        android:name="com.example.practica5.ui.fragments.launcher.LauncherFragment"
+        android:label="fragment_launcher"
+        tools:layout="@layout/fragment_launcher" >
+        <action
+            android:id="@+id/action_launcherFragment_to_nav_monuments"
+            app:destination="@id/nav_monuments"
+            app:popUpTo="@id/launcherFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">Practica5</string>
+    <string name="title_activity_navigation">NavigationActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Monuments App</string>
+    <string name="nav_header_subtitle">Powered by SDOS</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_monuments">Monuments</string>
+    <string name="menu_favorites">Favorites</string>
+    <string name="menu_my_monuments">My Monuments</string>
+    <string name="monuments_title">Monuments</string>
+    <string name="monuments__img_main_description">Monument main img</string>
+    <string name="common__sort">sort</string>
+    <string name="common__filter">filter</string>
+    <string name="common__dialog_accept">Aceptar</string>
+    <string name="monuments_fab_description">fab button</string>
+    <string name="monuments__sort_monuments">Ordenar monumentos</string>
+    <string name="monuments__sort_id">Ordenar por Fecha de creación</string>
+    <string name="monuments__sort_name">Ordenar por nombre</string>
+    <string name="monuments__sort_n_to_s">Ordenar de Norte a Sur</string>
+    <string name="monuments__sort_e_to_w">Ordenar de Este a Oeste</string>
 </resources>
