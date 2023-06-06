@@ -1,20 +1,18 @@
 package com.example.practica5.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.practica5.R
+import com.example.practica5.databinding.RowMonumentsCountryBinding
 
 class CountryAdapter(private val onItemClick: (String) -> Unit) :
     ListAdapter<String, CountryAdapter.ViewHolder>(CountryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.row_monuments_country, parent, false)
-        return ViewHolder(view)
+        val binding = RowMonumentsCountryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -22,10 +20,10 @@ class CountryAdapter(private val onItemClick: (String) -> Unit) :
         holder.bind(country)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(private val binding: RowMonumentsCountryBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(country: String) {
-            itemView.findViewById<TextView>(R.id.filterDialogLabelCountry).text = country
+            binding.filterDialogLabelCountry.text = country
             itemView.setOnClickListener {
                 onItemClick(country)
             }

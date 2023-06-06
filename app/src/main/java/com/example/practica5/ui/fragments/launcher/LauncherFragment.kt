@@ -9,17 +9,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import com.example.practica5.R
 import androidx.navigation.fragment.findNavController
+import com.example.practica5.databinding.FragmentLauncherBinding
 import com.example.practica5.utils.MonumentsConstant.DELAY_MILLIS
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class LauncherFragment : Fragment() {
 
+    private val binding by lazy { FragmentLauncherBinding.inflate(layoutInflater) }
     private val launcherViewModel: LauncherViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         launcherViewModel.navigateToDestinationLiveData.observe(viewLifecycleOwner) { destinationId ->
             destinationId?.let {
                 findNavController().navigate(destinationId)
@@ -27,7 +28,7 @@ class LauncherFragment : Fragment() {
         }
         launcherViewModel.navigateWithDelay(DELAY_MILLIS, R.id.action_launcherFragment_to_nav_monuments)
 
-        return inflater.inflate(R.layout.fragment_launcher, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

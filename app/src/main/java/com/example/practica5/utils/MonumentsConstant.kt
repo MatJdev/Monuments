@@ -17,4 +17,8 @@ object MonumentsConstant {
     const val DENIED_PERMISSIONS = "Permiso de ubicación denegado"
     const val EMAIL_SUBJECT = "Aprueba Historia"
     const val MONUMENT_TARGET = "monumentTarget"
+    const val UPDATE_INTERVAL_MILLIS = 10000L
+    const val FASTEST_UPDATE_INTERVAL_MILLIS = 5000L
+    const val FAVORITE_CHECK = "Check"
+    const val FAVORITE_UNCHECK = "UnCheck"
 }

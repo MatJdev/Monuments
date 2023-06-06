@@ -25,4 +25,10 @@
     <string name="webMonument__email">email</string>
     <string name="webMonument__message_email">Sabías que el monumento %1$s se encuentra en %2$s. Conócela un poco más aquí: %3$s</string>
     <string name="webMonument__empty_url_info">https://en.wikipedia.org/wiki/%1$s</string>
+    <string name="monuments__country_filter">Filtrar por país</string>
+    <string name="monuments__btn_close_description">Close dialog</string>
+    <string name="detail__info_btn_description">Info button</string>
+    <string name="detail__fav_btn_description">Fav button</string>
+    <string name="detail__static_map_description">Static map</string>
+    <string name="monuments__country_flag_img">flag country img</string>
 </resources>

@@ -10,7 +10,7 @@
         android:id="@+id/monumentsList"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="10dp"
+        android:paddingHorizontal="@dimen/recyclerview_padding_horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,11 +23,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="@dimen/fab_margin"
         android:contentDescription="@string/monuments_fab_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="42dp"
+        app:maxImageSize="@dimen/fab_max_img_size"
         app:srcCompat="@drawable/ic__monuments_navigation_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,7 +12,6 @@ import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -21,13 +20,16 @@ import androidx.navigation.fragment.findNavController
 import com.example.practica5.R
 import com.example.practica5.databinding.FragmentMapsBinding
 import com.example.practica5.domain.model.vo.MonumentVO
+import com.example.practica5.ui.activity.NavigationActivity
 import com.example.practica5.ui.adapter.CustomInfoWindowAdapter
 import com.example.practica5.ui.fragments.detail.DetailViewModel
 import com.example.practica5.ui.fragments.monuments.MonumentsViewModel
 import com.example.practica5.utils.MonumentsConstant.DENIED_PERMISSIONS
+import com.example.practica5.utils.MonumentsConstant.FASTEST_UPDATE_INTERVAL_MILLIS
 import com.example.practica5.utils.MonumentsConstant.LOCATION_PERMISSION_REQUEST_CODE
 import com.example.practica5.utils.MonumentsConstant.MONUMENTS_TITLE
 import com.example.practica5.utils.MonumentsConstant.MONUMENT_TARGET
+import com.example.practica5.utils.MonumentsConstant.UPDATE_INTERVAL_MILLIS
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -49,12 +51,8 @@ class MapsFragment : Fragment() {
     }
     private val detailViewModel: DetailViewModel by activityViewModels()
     private val mapsViewModel: MapsViewModel by activityViewModels()
-
-    private var _binding: FragmentMapsBinding? = null
-    private val binding get() = _binding
-
+    private val binding by lazy { FragmentMapsBinding.inflate(layoutInflater) }
     private lateinit var googleMap: GoogleMap
-
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
@@ -70,13 +68,12 @@ class MapsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentMapsBinding.inflate(inflater, container, false)
+    ): View {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
         locationRequest = LocationRequest.create().apply {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            interval = 10000
-            fastestInterval = 5000
+            interval = UPDATE_INTERVAL_MILLIS
+            fastestInterval = FASTEST_UPDATE_INTERVAL_MILLIS
         }
         locationCallback = object : LocationCallback(){}
 
@@ -97,17 +94,26 @@ class MapsFragment : Fragment() {
                 }
             }
 
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(callback)
-        binding?.mapsFabList?.setOnClickListener {
+        val mapFragment = childFragmentManager.findFragmentById(R.id.mapContainer) as SupportMapFragment?
+        if (mapFragment == null) {
+            val supportMapFragment = SupportMapFragment.newInstance()
+            childFragmentManager.beginTransaction()
+                .replace(R.id.mapContainer, supportMapFragment)
+                .commit()
+            childFragmentManager.executePendingTransactions()
+            supportMapFragment.getMapAsync(callback)
+        } else {
+            mapFragment.getMapAsync(callback)
+        }
+        binding.mapsFabList.setOnClickListener {
             findNavController().navigate(R.id.action_mapsFragment_to_nav_monuments)
         }
-        val mainToolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
+        val mainToolbar = (requireActivity() as NavigationActivity).binding.appBarNavigation.toolbar
         mainToolbar.title = MONUMENTS_TITLE
         (activity as? AppCompatActivity)?.let { activity ->
             activity.setSupportActionBar(mainToolbar)
@@ -116,7 +122,7 @@ class MapsFragment : Fragment() {
         }
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        binding?.mapsFabCenterMap?.setOnClickListener {
+        binding.mapsFabCenterMap.setOnClickListener {
             centerMapOnLocation()
         }
     }
@@ -141,15 +147,13 @@ class MapsFragment : Fragment() {
 
         monumentsList.forEach { monument ->
             lifecycleScope.launch(Dispatchers.IO) {
-                binding?.let {
-                    with(it) {
-                        val latLng = LatLng(monument.location.latitude, monument.location.longitude)
-                        val address = mapsViewModel.getAddressFromLocation(mapsFabCenterMap.context,monument.location.latitude, monument.location.longitude)
-                        val markerIcon = mapsViewModel.getMarkerIcon(mapsFabCenterMap.context)
-                        val markerOptions = mapsViewModel.createMarkerOptions(monument, latLng, markerIcon, address)
-                        withContext(Dispatchers.Main) {
-                            googleMap.addMarker(markerOptions)
-                        }
+                with(binding) {
+                    val latLng = LatLng(monument.location.latitude, monument.location.longitude)
+                    val address = mapsViewModel.getAddressFromLocation(mapsFabCenterMap.context,monument.location.latitude, monument.location.longitude)
+                    val markerIcon = mapsViewModel.getMarkerIcon(mapsFabCenterMap.context)
+                    val markerOptions = mapsViewModel.createMarkerOptions(monument, latLng, markerIcon, address)
+                    withContext(Dispatchers.Main) {
+                        googleMap.addMarker(markerOptions)
                     }
                 }
             }
@@ -228,7 +232,7 @@ class MapsFragment : Fragment() {
         grantResults: IntArray
     ) {
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED) {
                 startLocationUpdates()
             } else {
                 requestLocationPermission()
@@ -256,4 +260,9 @@ class MapsFragment : Fragment() {
     private fun requestLocationPermission() {
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
+
+    /*override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }*/
 }

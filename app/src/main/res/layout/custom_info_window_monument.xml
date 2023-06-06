@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="150dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/bg__monuments_custom_info_window">
 
@@ -9,16 +9,16 @@
         android:id="@+id/monumentName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="@dimen/info_window_marker_title_size"
         android:textColor="@color/white"
-        android:padding="8dp" />
+        android:padding="@dimen/dialog_padding" />
 
     <TextView
         android:id="@+id/monumentAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="#808080"
-        android:padding="8dp" />
+        android:textSize="@dimen/info_window_marker_subtitle_size"
+        android:textColor="@color/md_theme_dark_onSurfaceVariant"
+        android:padding="@dimen/dialog_padding" />
 
 </LinearLayout>

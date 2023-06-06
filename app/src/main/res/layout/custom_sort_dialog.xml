@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg__rounded_dialog"
@@ -10,21 +9,21 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="30dp">
+        android:layout_marginHorizontal="@dimen/cardview_margin_horizontal"
+        android:layout_marginTop="@dimen/cardview_margin_vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="@dimen/content_margin"
+            android:layout_marginTop="@dimen/content_margin"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/monuments__sort_monuments"
-                android:textSize="26sp"
+                android:textSize="@dimen/dialog_title_size"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -34,11 +33,12 @@
                 style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dialog_icon_margin_top"
+                android:layout_marginEnd="@dimen/dialog_icon_margin_end"
+                android:contentDescription="@string/monuments__btn_close_description"
                 app:icon="@drawable/ic__monuments_close_24"
-                app:iconSize="38dp"
+                app:iconSize="@dimen/dialog_icon_size"
                 app:iconTint="@color/black"
-                android:layout_marginEnd="-14dp"
-                android:layout_marginTop="-8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:strokeWidth="0dp" />
@@ -47,53 +47,53 @@
                 android:id="@+id/sortDialogRadioGroup"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/dialog_content_margin_top"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:paddingBottom="20dp"
+                android:paddingBottom="@dimen/dialog_content_padding_bottom"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dialogBtnClose">
+                app:layout_constraintTop_toBottomOf="@id/dialogBtnClose">
 
                 <RadioButton
                     android:id="@+id/sortDialogRadioBtnId"
                     style="@style/RadioButtonCustomStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:background="@drawable/radio_btn_background"
+                    android:gravity="center"
                     android:text="@string/monuments__sort_id"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/monuments_text_body_size" />
 
                 <RadioButton
                     android:id="@+id/sortDialogRadioBtnName"
                     style="@style/RadioButtonCustomStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:background="@drawable/radio_btn_background"
+                    android:gravity="center"
                     android:text="@string/monuments__sort_name"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/monuments_text_body_size" />
 
                 <RadioButton
                     android:id="@+id/sortDialogRadioBtnNtoS"
                     style="@style/RadioButtonCustomStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:background="@drawable/radio_btn_background"
+                    android:gravity="center"
                     android:text="@string/monuments__sort_n_to_s"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/monuments_text_body_size" />
 
                 <RadioButton
                     android:id="@+id/sortDialogRadioBtnEtoW"
                     style="@style/RadioButtonCustomStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:background="@drawable/radio_btn_background"
+                    android:gravity="center"
                     android:text="@string/monuments__sort_e_to_w"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/monuments_text_body_size" />
             </RadioGroup>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -102,10 +102,10 @@
     <Button
         android:id="@+id/dialogBtnAccept"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="30dp"
+        android:layout_height="@dimen/dialog_btn_height"
+        android:layout_marginHorizontal="@dimen/dialog_btn_margin_horizontal"
+        android:layout_marginVertical="@dimen/dialog_btn_margin_vertical"
         android:text="@string/common__dialog_accept"
-        android:textSize="28sp" />
+        android:textSize="@dimen/dialog_btn_text_size" />
 
 </LinearLayout>

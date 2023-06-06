@@ -8,78 +8,67 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.example.practica5.R
 import com.example.practica5.databinding.FragmentDetailBinding
 import com.example.practica5.domain.model.vo.MonumentVO
 import com.example.practica5.ui.adapter.PhotoAdapter
 import com.example.practica5.ui.fragments.webMonument.WebMonumentViewModel
+import com.example.practica5.utils.MonumentsUtils.renderMonument
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 
 class DetailFragment : Fragment(), OnMapReadyCallback {
 
-    private var _binding: FragmentDetailBinding? = null
-    private val binding get() = _binding
-
+    private val binding by lazy { FragmentDetailBinding.inflate(layoutInflater) }
     private val detailViewModel: DetailViewModel by activityViewModels()
     private val webMonumentViewModel: WebMonumentViewModel by activityViewModels()
     private lateinit var mapView: MapView
-    private lateinit var googleMap: GoogleMap
+    private val adapter: PhotoAdapter by lazy { PhotoAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentDetailBinding.inflate(inflater, container, false)
-        return binding?.root
+    ): View {
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
+        webMonumentViewModel.clearLiveData()
 
         detailViewModel.monumentLiveData.observe(viewLifecycleOwner) { monument ->
-            drawMonumentInfo(monument)
+            binding.renderMonument(monument, adapter)
             initListener(monument)
         }
 
-        binding?.let {
-            with(it) {
-                mapView = detailMapViewStatic
-                mapView.onCreate(savedInstanceState)
-
-                mapView.getMapAsync(detailViewModel)
-            }
+        with(binding) {
+            mapView = detailMapViewStatic
+            mapView.onCreate(savedInstanceState)
+            mapView.getMapAsync(this@DetailFragment)
         }
-    }
 
-    private fun drawMonumentInfo(monument: MonumentVO) {
-        binding?.let {
-            with(it) {
-                detailToolbar.title = monument.name
-                val urlList = monument.images
-                detailViewPager.adapter = PhotoAdapter(urlList)
-                detailLabelInfo.text = monument.description
-                detailLabelCity.text = monument.city
-                detailLabelName.text = monument.name
-                Glide.with(detailViewPager.context).load(monument.countryFlag).into(detailImgFlag)
+        webMonumentViewModel.getWebMonument().observe(viewLifecycleOwner) { monument ->
+            if (monument != null) {
+                findNavController().navigate(R.id.action_detailFragment_to_webMonumentFragment)
             }
         }
     }
 
     private fun initListener(monument: MonumentVO) {
-        binding?.detailBtnInfoWeb?.setOnClickListener {
-            webMonumentViewModel.init(monument)
-            findNavController().navigate(R.id.action_detailFragment_to_webMonumentFragment)
+        binding.detailBtnInfoWeb.setOnClickListener {
+            webMonumentViewModel.loadMonument(monument)
         }
     }
 
     private fun initToolbar() {
-        val toolbar = binding?.detailToolbar
+        val toolbar = binding.detailToolbar
 
-        toolbar?.setNavigationOnClickListener {
+        toolbar.setNavigationOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
@@ -111,7 +100,12 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(map: GoogleMap) {
-        googleMap = map
-        detailViewModel.onMapReady(googleMap)
+        map.uiSettings.setAllGesturesEnabled(false)
+        val monument = detailViewModel.monumentLiveData.value
+        monument?.let {
+            val latLng = LatLng(it.location.latitude, it.location.longitude)
+            map.addMarker(MarkerOptions().position(latLng))
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+        }
     }
 }

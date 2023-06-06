@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
+    android:id="@+id/mapContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.map.MapsFragment" >
+    tools:context=".ui.fragments.map.MapsFragment">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/mapsFabList"
@@ -14,11 +13,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="@dimen/fab_margin"
         android:contentDescription="@string/monuments_fab_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="32dp"
+        app:maxImageSize="@dimen/maps_fab_max_img_size"
         app:tint="@color/white"
         app:srcCompat="@drawable/ic__monuments_table_rows_24" />
 
@@ -28,12 +27,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="120dp"
+        android:layout_marginBottom="@dimen/maps_fab_bottom_margin"
         android:contentDescription="@string/monuments_fab_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="32dp"
+        app:maxImageSize="@dimen/maps_fab_max_img_size"
         app:tint="@color/black"
         android:backgroundTint="@color/md_theme_dark_onPrimaryContainer"
         app:srcCompat="@drawable/ic__monuments_maps_my_location_24" />
-</fragment>
+</FrameLayout>

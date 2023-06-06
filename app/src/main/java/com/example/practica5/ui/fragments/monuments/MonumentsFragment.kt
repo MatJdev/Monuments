@@ -21,7 +21,6 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -29,12 +28,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.practica5.R
+import com.example.practica5.databinding.CustomFilterCountryDialogBinding
+import com.example.practica5.databinding.CustomSortDialogBinding
 import com.example.practica5.databinding.FragmentMonumentsBinding
 import com.example.practica5.domain.model.vo.MonumentVO
+import com.example.practica5.ui.activity.NavigationActivity
 import com.example.practica5.ui.adapter.CountryAdapter
 import com.example.practica5.ui.adapter.MonumentsListAdapter
 import com.example.practica5.ui.fragments.detail.DetailViewModel
-import com.example.practica5.utils.MonumentsConstant
 import com.example.practica5.utils.MonumentsConstant.FIRST_LIST_POSITION
 import com.example.practica5.utils.MonumentsConstant.MONUMENTS_TITLE
 import com.example.practica5.utils.MonumentsConstant.MONUMENT_ID
@@ -42,12 +43,10 @@ import com.example.practica5.utils.MonumentsConstant.MONUMENT_NAME
 import com.example.practica5.utils.MonumentsConstant.SORTED_EAST_WEST
 import com.example.practica5.utils.MonumentsConstant.SORTED_NORTH_SOUTH
 import kotlinx.coroutines.launch
-import java.io.Serializable
 
 class MonumentsFragment : Fragment() {
 
-    private var _binding: FragmentMonumentsBinding? = null
-    private val binding get() = _binding
+    private val binding by lazy { FragmentMonumentsBinding.inflate(layoutInflater) }
     private val monumentsViewModel: MonumentsViewModel by activityViewModels {
         ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
     }
@@ -63,21 +62,14 @@ class MonumentsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
-        _binding = FragmentMonumentsBinding.inflate(inflater, container, false)
-
-        binding?.let { binding ->
-            with(binding) {
-                monumentsList.adapter = adapter
-            }
-        }
-        return binding?.root
+    ): View {
+        binding.monumentsList.adapter = adapter
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mainToolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
+        val mainToolbar = (requireActivity() as NavigationActivity).binding.appBarNavigation.toolbar
         (activity as? AppCompatActivity)?.let { activity ->
             activity.setSupportActionBar(mainToolbar)
             activity.supportActionBar?.show()
@@ -88,18 +80,11 @@ class MonumentsFragment : Fragment() {
             adapter.submitList(monuments) { scrollToFirstPosition() }
         }
         initToolbarMenu()
-        binding?.let {
-            with(it){
-                monumentsFab.setOnClickListener {
-                    findNavController().navigate(R.id.action_nav_monuments_to_mapsFragment)
-                }
+        with(binding){
+            monumentsFab.setOnClickListener {
+                findNavController().navigate(R.id.action_nav_monuments_to_mapsFragment)
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun onFavoriteSelected(monument: MonumentVO) {
@@ -112,7 +97,7 @@ class MonumentsFragment : Fragment() {
     }
 
     private fun scrollToFirstPosition() {
-        binding?.monumentsList?.scrollToPosition(FIRST_LIST_POSITION)
+        binding.monumentsList.scrollToPosition(FIRST_LIST_POSITION)
     }
 
     private fun initToolbarMenu() {
@@ -147,29 +132,24 @@ class MonumentsFragment : Fragment() {
     }
 
     private fun showSortMonumentDialog() {
-        val dialogView = createDialogView()
-        val radioGroup = dialogView.findViewById<RadioGroup>(R.id.sortDialogRadioGroup)
-        val alertDialog = createAlertDialog(dialogView)
+        val binding = CustomSortDialogBinding.inflate(LayoutInflater.from(requireContext()))
+        val radioGroup = binding.sortDialogRadioGroup
+        val alertDialog = createAlertDialog(binding)
 
-        dialogView.findViewById<Button>(R.id.dialogBtnAccept)?.setOnClickListener {
+        binding.dialogBtnAccept.setOnClickListener {
             handleAcceptButtonClicked(alertDialog, radioGroup.checkedRadioButtonId)
         }
 
-        dialogView.findViewById<Button>(R.id.dialogBtnClose)?.setOnClickListener {
+        binding.dialogBtnClose.setOnClickListener {
             alertDialog.dismiss()
         }
 
         alertDialog.show()
     }
 
-    @SuppressLint("InflateParams")
-    private fun createDialogView(): View {
-        return LayoutInflater.from(requireContext()).inflate(R.layout.custom_sort_dialog, null)
-    }
-
-    private fun createAlertDialog(dialogView: View): AlertDialog {
+    private fun createAlertDialog(binding: CustomSortDialogBinding): AlertDialog {
         val alertDialog = AlertDialog.Builder(requireContext())
-            .setView(dialogView)
+            .setView(binding.root)
             .create()
         alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         return alertDialog
@@ -187,13 +167,9 @@ class MonumentsFragment : Fragment() {
     }
 
     private fun showCountryDialog(countries: List<String>) {
+        val binding = CustomFilterCountryDialogBinding.inflate(LayoutInflater.from(requireContext()))
         val dialogBuilder = AlertDialog.Builder(requireContext())
-        val inflater = LayoutInflater.from(requireContext())
-        val dialogView = inflater.inflate(R.layout.custom_filter_country_dialog, null)
-        dialogBuilder.setView(dialogView)
-
-        val recyclerView = dialogView.findViewById<RecyclerView>(R.id.filterDialogListCounties)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        dialogBuilder.setView(binding.root)
 
         val alertDialog = dialogBuilder.create()
         alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -202,10 +178,10 @@ class MonumentsFragment : Fragment() {
             alertDialog.dismiss()
             monumentsViewModel.getFilteredMonumentsByCountry(country)
         }
-        recyclerView.adapter = countryAdapter
+        binding.filterDialogListCounties.adapter = countryAdapter
         countryAdapter.submitList(countries)
 
-        dialogView.findViewById<Button>(R.id.dialogBtnClose)?.setOnClickListener {
+        binding.dialogBtnClose.setOnClickListener {
             alertDialog.dismiss()
         }
 

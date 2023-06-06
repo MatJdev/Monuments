@@ -9,15 +9,15 @@ import com.example.practica5.domain.model.vo.MonumentVO
 import com.example.practica5.utils.MonumentsConstant.EMPTY_INFO
 
 class WebMonumentViewModel : ViewModel() {
-    private val monumentMutableLiveData = MutableLiveData<MonumentVO>()
-    val monumentLiveData: LiveData<MonumentVO> get() = monumentMutableLiveData
+    private val webMonumentLiveData = MutableLiveData<MonumentVO?>(null)
+    fun getWebMonument(): LiveData<MonumentVO?> = webMonumentLiveData
 
-    fun init(monument: MonumentVO) {
-        monumentMutableLiveData.value = monument
+    fun loadMonument(monument: MonumentVO) {
+        webMonumentLiveData.postValue(monument)
     }
 
     fun getWebUrl(context: Context): String {
-        val monument = monumentLiveData.value
+        val monument = getWebMonument().value
         return if (monument?.urlExtraInformation.isNullOrEmpty()) {
             context.getString(R.string.webMonument__empty_url_info, monument?.name)
         } else {
@@ -26,12 +26,16 @@ class WebMonumentViewModel : ViewModel() {
     }
 
     fun getEmailMessage(context: Context): String {
-        val monument = monumentLiveData.value
+        val monument = getWebMonument().value
         return context.getString(
             R.string.webMonument__message_email,
             monument?.name,
             monument?.city,
             monument?.urlExtraInformation
         )
+    }
+
+    fun clearLiveData() {
+        webMonumentLiveData.value = null
     }
 }

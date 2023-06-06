@@ -26,49 +26,44 @@ import com.example.practica5.utils.MonumentsConstant.MONUMENT_TARGET
 
 class WebMonumentFragment : Fragment() {
 
-    private var _binding: FragmentWebMonumentBinding? = null
-    private val binding get() = _binding
-
+    private val binding by lazy { FragmentWebMonumentBinding.inflate(layoutInflater) }
     private val webMonumentViewModel: WebMonumentViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentWebMonumentBinding.inflate(inflater, container, false)
-        return binding?.root
+    ): View {
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        webMonumentViewModel.monumentLiveData.observe(viewLifecycleOwner) { monument ->
+        webMonumentViewModel.getWebMonument().observe(viewLifecycleOwner) { monument ->
             if (monument != null) {
                 initWebView()
-                binding?.webMonumentToolbar?.title = monument.name
+                binding.webMonumentToolbar.title = monument.name
                 initToolbarMenu(monument)
             }
         }
     }
 
     private fun initToolbar() {
-        binding?.webMonumentToolbar?.setNavigationOnClickListener {
+        binding.webMonumentToolbar.setNavigationOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         (activity as? AppCompatActivity)?.let { activity ->
-            activity.setSupportActionBar(binding?.webMonumentToolbar)
+            activity.setSupportActionBar(binding.webMonumentToolbar)
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun initWebView() {
-        binding?.let {
-            with(it) {
-                webMonumentWebView.settings.javaScriptEnabled = true
-                webMonumentWebView.webViewClient = WebViewClient()
-                webMonumentWebView.loadUrl(webMonumentViewModel.getWebUrl(webMonumentWebView.context))
-            }
+        with(binding) {
+            webMonumentWebView.settings.javaScriptEnabled = true
+            webMonumentWebView.webViewClient = WebViewClient()
+            webMonumentWebView.loadUrl(webMonumentViewModel.getWebUrl(webMonumentWebView.context))
         }
     }
 
@@ -90,11 +85,9 @@ class WebMonumentFragment : Fragment() {
                     }
 
                     R.id.action_email -> {
-                        binding?.let {
-                            with(it) {
-                                val message = webMonumentViewModel.getEmailMessage(webMonumentWebView.context)
-                                sendEmail(message)
-                            }
+                        with(binding) {
+                            val message = webMonumentViewModel.getEmailMessage(webMonumentWebView.context)
+                            sendEmail(message)
                         }
                         true
                     }

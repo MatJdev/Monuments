@@ -1,6 +1,5 @@
 package com.example.practica5.ui.adapter
 
-import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -8,6 +7,9 @@ import com.bumptech.glide.Glide
 import com.example.practica5.R
 import com.example.practica5.databinding.RowMonumentsMonumentBinding
 import com.example.practica5.domain.model.vo.MonumentVO
+import com.example.practica5.utils.MonumentsConstant.FAVORITE_CHECK
+import com.example.practica5.utils.MonumentsConstant.FAVORITE_UNCHECK
+import com.example.practica5.utils.MonumentsUtils.render
 
 class MonumentsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val binding = RowMonumentsMonumentBinding.bind(view)
@@ -23,8 +25,8 @@ class MonumentsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     }
 
     private fun loadMonumentImg(monument: MonumentVO) = with(binding) {
-        Glide.with(monumentsLabelCity.context).load(monument.images[0].url).into(monumentsImgMain)
-        Glide.with(monumentsLabelCity.context).load(monument.countryFlag).into(monumentsImgFlag)
+        monumentsImgMain.render(monument.images.first().url)
+        monumentsImgFlag.render(monument.countryFlag)
     }
 
     private fun initListener(monument: MonumentVO, onClickListener: (MonumentVO) -> Unit, onFavoriteClickListener: (MonumentVO) -> Unit) = with(binding) {
@@ -35,12 +37,12 @@ class MonumentsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         monumentsBtnFavorite.setOnClickListener {
             onFavoriteClickListener(monument)
             val icon: Int
-            if (monumentsBtnFavorite.tag == "unCheck") {
+            if (monumentsBtnFavorite.tag == FAVORITE_UNCHECK) {
                 icon = R.drawable.ic__monuments_star_yellow_24
-                monumentsBtnFavorite.tag = "Check"
+                monumentsBtnFavorite.tag = FAVORITE_CHECK
             } else {
                 icon = R.drawable.ic__monuments_star_border_24
-                monumentsBtnFavorite.tag = "unCheck"
+                monumentsBtnFavorite.tag = FAVORITE_UNCHECK
             }
             monumentsBtnFavorite.icon = ContextCompat.getDrawable(monumentsBtnFavorite.context, icon)
         }

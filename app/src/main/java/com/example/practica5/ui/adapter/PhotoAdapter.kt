@@ -1,33 +1,42 @@
 package com.example.practica5.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.practica5.R
+import androidx.recyclerview.widget.ListAdapter
+import com.example.practica5.databinding.RowDetailPhotoBinding
 import com.example.practica5.domain.model.vo.ImageVO
+import com.example.practica5.utils.MonumentsUtils.render
 
-class PhotoAdapter(private val photos: List<ImageVO>) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
+class PhotoAdapter : ListAdapter<ImageVO, PhotoAdapter.PhotoViewHolder>(PhotoDiffCallback()) {
 
-    inner class PhotoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageView: ImageView = itemView.findViewById(R.id.detailImgViewPhoto)
+    inner class PhotoViewHolder(binding: RowDetailPhotoBinding) : RecyclerView.ViewHolder(binding.root) {
+        private val imageView: ImageView = binding.detailImgViewPhoto
+
+        fun bind(photo: ImageVO) {
+            imageView.render(photo.url)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.row_detail_photo, parent, false)
-        return PhotoViewHolder(itemView)
+        val binding = RowDetailPhotoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return PhotoViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
-        val photo = photos[position]
-        // Configurar la imagen en el ImageView
-        //holder.imageView.setImageResource(photo.url)
-        Glide.with(holder.imageView.context).load(photo.url).into(holder.imageView)
+        val photo = getItem(position)
+        holder.bind(photo)
+    }
+}
+
+class PhotoDiffCallback : DiffUtil.ItemCallback<ImageVO>() {
+    override fun areItemsTheSame(oldItem: ImageVO, newItem: ImageVO): Boolean {
+        return oldItem.id == newItem.id
     }
 
-    override fun getItemCount(): Int {
-        return photos.size
+    override fun areContentsTheSame(oldItem: ImageVO, newItem: ImageVO): Boolean {
+        return oldItem == newItem
     }
 }
