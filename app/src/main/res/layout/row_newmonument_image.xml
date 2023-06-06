@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/new_monument_img_margin_horizontal">
+
+    <ImageView
+        android:id="@+id/newMonumentImgImages"
+        android:layout_width="@dimen/new_monument_add_image_size"
+        android:layout_height="@dimen/new_monument_add_image_size"
+        android:contentDescription="@string/newMonument__monument_image_description"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@color/md_theme_dark_error" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/newMonumentBtnClear"
+        style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/new_monument_bin_img_margin_end"
+        android:layout_marginBottom="@dimen/new_monument_bin_img_margin_bottom"
+        android:clickable="false"
+        app:icon="@drawable/ic__monuments_bin"
+        app:iconSize="@dimen/new_monument_icon_size"
+        app:iconTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:strokeWidth="0dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

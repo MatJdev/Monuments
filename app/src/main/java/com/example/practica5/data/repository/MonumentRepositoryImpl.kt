@@ -9,6 +9,7 @@ import com.example.practica5.domain.model.bo.MonumentBO
 import com.example.practica5.domain.repository.LocalMonumentDataSource
 import com.example.practica5.domain.repository.MonumentRepository
 import com.example.practica5.domain.repository.RemoteMonumentDataSource
+import com.example.practica5.utils.MonumentsConstant.EMPTY_INFO
 import com.example.practica5.utils.MonumentsUtils.getCountryCodeFromLocation
 import com.example.practica5.utils.MonumentsUtils.getCountryFromLocation
 
@@ -36,15 +37,6 @@ class MonumentRepositoryImpl(
         localDataSource.updateFavoriteMonument(id, favorite)
     }
 
-    private suspend fun getFlagUrlFromApi(countryCode: String): String {
-        val response = RetrofitHelper.getFlagsApiService().getFlagImage(countryCode)
-        return if (response.isSuccessful) {
-            response.raw().request.url.toString()
-        } else {
-            ""
-        }
-    }
-
     private suspend fun setExtraProperties(response: List<MonumentDTO>): ArrayList<MonumentDTO> {
         val processData = ArrayList<MonumentDTO>()
         for (monument in response) {
@@ -53,7 +45,7 @@ class MonumentRepositoryImpl(
                 val countryCode =
                     getCountryCodeFromLocation(context, monument.location.latitude, monument.location.longitude)
                 if (countryCode != null) {
-                    val countryFlag = getFlagUrlFromApi(countryCode)
+                    val countryFlag = getCountryFlag(countryCode)
                     val monumentWithCountry = monument.copy(
                         country = country,
                         countryCode = countryCode,
@@ -65,6 +57,10 @@ class MonumentRepositoryImpl(
         }
 
         return processData
+    }
+
+    override suspend fun insertOneMonument(monument: MonumentBO) {
+        localDataSource.insertOneMonument(MonumentMapper.mapMonumentBoToDbo(monument))
     }
 
     override suspend fun getMonumentsOrderedByNtoS(): List<MonumentBO> {
@@ -85,5 +81,14 @@ class MonumentRepositoryImpl(
 
     override suspend fun getFilteredMonuments(country: String): List<MonumentBO> {
         return localDataSource.getFilteredMonuments(country).map { MonumentMapper.mapMonumentDbotoBo(it) }
+    }
+
+    override suspend fun getCountryFlag(countryCode: String): String {
+        val response = RetrofitHelper.flagsApiServiceInstance.getFlagImage(countryCode)
+        return if (response.isSuccessful) {
+            response.raw().request.url.toString()
+        } else {
+            EMPTY_INFO
+        }
     }
 }

@@ -38,7 +38,7 @@ class MonumentsViewModel(application: Application) : AndroidViewModel(applicatio
         getAllMonuments()
     }
 
-    private fun getAllMonuments() {
+    fun getAllMonuments() {
         viewModelScope.launch {
             val result = getMonumentsUseCase()
             val resultVO = result?.map { MonumentMapper.mapMonumentBoToVo(it) }

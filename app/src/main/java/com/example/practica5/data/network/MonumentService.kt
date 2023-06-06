@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 class MonumentService {
-    private val retrofit = RetrofitHelper.getRetrofit()
+    private val retrofit = RetrofitHelper.retrofitInstance
 
     suspend fun getMonuments(): List<MonumentDTO> {
         return withContext(Dispatchers.IO) {

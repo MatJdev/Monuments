@@ -3,7 +3,6 @@ package com.example.practica5.ui.adapter
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.practica5.R
 import com.example.practica5.databinding.RowMonumentsMonumentBinding
 import com.example.practica5.domain.model.vo.MonumentVO

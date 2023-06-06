@@ -21,6 +21,9 @@ interface MonumentDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMonument(monuments: List<MonumentDBO>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertOneMonument(monument: MonumentDBO)
+
     @Delete
     suspend fun deleteMonument(monument: MonumentDBO)
 

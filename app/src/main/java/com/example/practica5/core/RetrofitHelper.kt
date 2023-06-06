@@ -9,10 +9,13 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
 
 object RetrofitHelper {
-    fun getRetrofit(): Retrofit {
+
+    val retrofitInstance: Retrofit by lazy { createRetrofit() }
+    val flagsApiServiceInstance: FlagsApiService by lazy { createFlagsApiService() }
+
+    private fun createRetrofit(): Retrofit {
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val client = OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -25,7 +28,7 @@ object RetrofitHelper {
             .build()
     }
 
-    fun getFlagsApiService(): FlagsApiService {
+    private fun createFlagsApiService(): FlagsApiService {
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val client = OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY

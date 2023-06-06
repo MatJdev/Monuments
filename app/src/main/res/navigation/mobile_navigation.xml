@@ -28,7 +28,11 @@
         android:id="@+id/nav_my_monuments"
         android:name="com.example.practica5.ui.fragments.mymonuments.MyMonumentsFragment"
         android:label="@string/menu_my_monuments"
-        tools:layout="@layout/fragment_mymonuments" />
+        tools:layout="@layout/fragment_mymonuments" >
+        <action
+            android:id="@+id/action_nav_my_monuments_to_createMonumentFragment"
+            app:destination="@id/createMonumentFragment" />
+    </fragment>
     <fragment
         android:id="@+id/launcherFragment"
         android:name="com.example.practica5.ui.fragments.launcher.LauncherFragment"
@@ -69,5 +73,20 @@
         <action
             android:id="@+id/action_mapsFragment_to_nav_monuments"
             app:destination="@id/nav_monuments" />
+        <action
+            android:id="@+id/action_mapsFragment_to_createMonumentFragment"
+            app:destination="@id/createMonumentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createMonumentFragment"
+        android:name="com.example.practica5.ui.fragments.createMonument.CreateMonumentFragment"
+        android:label="fragment_create_monument"
+        tools:layout="@layout/fragment_create_monument" >
+        <action
+            android:id="@+id/action_createMonumentFragment_to_nav_monuments"
+            app:destination="@id/nav_monuments" />
+        <action
+            android:id="@+id/action_createMonumentFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
     </fragment>
 </navigation>

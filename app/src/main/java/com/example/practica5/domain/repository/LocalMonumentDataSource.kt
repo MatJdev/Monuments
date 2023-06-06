@@ -11,4 +11,5 @@ interface LocalMonumentDataSource {
     suspend fun getSortedMonuments(sortMode: String): List<MonumentDBO>
     suspend fun getUniqueCountries(): List<String>
     suspend fun getFilteredMonuments(country: String): List<MonumentDBO>
+    suspend fun insertOneMonument(monument: MonumentDBO)
 }

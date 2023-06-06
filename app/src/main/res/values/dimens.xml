@@ -54,4 +54,18 @@
     <dimen name="row_monuments_card_corner_radius">20dp</dimen>
     <dimen name="row_monuments_img_height">140dp</dimen>
     <dimen name="row_monuments_title_size">26sp</dimen>
+    <dimen name="fragment_margin_top">6dp</dimen>
+    <dimen name="new_monument_max_characters_margin_top">-20dp</dimen>
+    <dimen name="new_monument_spinner_height">48dp</dimen>
+    <dimen name="new_monument_margin_top_bottom">10dp</dimen>
+    <dimen name="new_monument_mapview_height">185dp</dimen>
+    <dimen name="new_monument_recyclerview_width">270dp</dimen>
+    <dimen name="new_monument_recycler_margin_top">40dp</dimen>
+    <dimen name="new_monument_add_image_size">85dp</dimen>
+    <dimen name="new_monument_save_button_height">60dp</dimen>
+    <dimen name="new_monument_padding">10dp</dimen>
+    <dimen name="new_monument_img_margin_horizontal">5dp</dimen>
+    <dimen name="new_monument_bin_img_margin_end">-10dp</dimen>
+    <dimen name="new_monument_bin_img_margin_bottom">-6dp</dimen>
+    <dimen name="new_monument_icon_size">24dp</dimen>
 </resources>

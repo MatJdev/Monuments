@@ -10,4 +10,6 @@ interface MonumentRepository {
     suspend fun getSortedMonuments(sortMode: String): List<MonumentBO>
     suspend fun getUniqueCountries(): List<String>
     suspend fun getFilteredMonuments(country: String): List<MonumentBO>
+    suspend fun getCountryFlag(countryCode: String): String
+    suspend fun insertOneMonument(monument: MonumentBO)
 }

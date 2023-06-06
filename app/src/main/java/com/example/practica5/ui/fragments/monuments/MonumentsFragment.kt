@@ -1,6 +1,5 @@
 package com.example.practica5.ui.fragments.monuments
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -10,11 +9,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.RadioButton
-import android.widget.RadioGroup
 import androidx.activity.addCallback
-import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
@@ -24,9 +20,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.practica5.R
 import com.example.practica5.databinding.CustomFilterCountryDialogBinding
 import com.example.practica5.databinding.CustomSortDialogBinding
@@ -85,6 +80,16 @@ class MonumentsFragment : Fragment() {
                 findNavController().navigate(R.id.action_nav_monuments_to_mapsFragment)
             }
         }
+
+        val destinationChangedListener = NavController.OnDestinationChangedListener { _, destination, _ ->
+            monumentsViewModel.getAllMonuments()
+        }
+        findNavController().addOnDestinationChangedListener(destinationChangedListener)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        monumentsViewModel.getAllMonuments()
     }
 
     private fun onFavoriteSelected(monument: MonumentVO) {

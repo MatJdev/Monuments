@@ -154,4 +154,32 @@ object MonumentMapper {
             id = imageBO.id,
             url = imageBO.url
         )
+
+    fun mapMonumentVoToBo(monumentVO: MonumentVO): MonumentBO =
+        MonumentBO(
+            id = monumentVO.id,
+            name = monumentVO.name,
+            city = monumentVO.city,
+            description = monumentVO.description,
+            urlExtraInformation = monumentVO.urlExtraInformation,
+            location = mapLocationVoToBo(monumentVO.location),
+            images = monumentVO.images.map { mapImageVoToBo(it) },
+            country = monumentVO.country,
+            countryCode = monumentVO.countryCode,
+            isFromMyMonuments = monumentVO.isFromMyMonuments,
+            countryFlag = monumentVO.countryFlag,
+            isFavorite = monumentVO.isFavorite
+        )
+
+    private fun mapLocationVoToBo(locationVO: LocationVO): LocationBO =
+        LocationBO(
+            latitude = locationVO.latitude,
+            longitude = locationVO.longitude
+        )
+
+    private fun mapImageVoToBo(imageVO: ImageVO): ImageBO =
+        ImageBO(
+            id = imageVO.id,
+            url = imageVO.url
+        )
 }

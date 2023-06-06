@@ -22,9 +22,10 @@ import com.example.practica5.databinding.FragmentMapsBinding
 import com.example.practica5.domain.model.vo.MonumentVO
 import com.example.practica5.ui.activity.NavigationActivity
 import com.example.practica5.ui.adapter.CustomInfoWindowAdapter
+import com.example.practica5.ui.fragments.createMonument.CreateMonumentViewModel
 import com.example.practica5.ui.fragments.detail.DetailViewModel
 import com.example.practica5.ui.fragments.monuments.MonumentsViewModel
-import com.example.practica5.utils.MonumentsConstant.DENIED_PERMISSIONS
+import com.example.practica5.utils.MonumentsConstant.DENIED_LOCATION_PERMISSIONS
 import com.example.practica5.utils.MonumentsConstant.FASTEST_UPDATE_INTERVAL_MILLIS
 import com.example.practica5.utils.MonumentsConstant.LOCATION_PERMISSION_REQUEST_CODE
 import com.example.practica5.utils.MonumentsConstant.MONUMENTS_TITLE
@@ -52,6 +53,8 @@ class MapsFragment : Fragment() {
     private val detailViewModel: DetailViewModel by activityViewModels()
     private val mapsViewModel: MapsViewModel by activityViewModels()
     private val binding by lazy { FragmentMapsBinding.inflate(layoutInflater) }
+    private val createMonumentViewModel: CreateMonumentViewModel by activityViewModels()
+
     private lateinit var googleMap: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
@@ -90,7 +93,7 @@ class MapsFragment : Fragment() {
                     }
 
                 } else {
-                    Toast.makeText(requireContext(), DENIED_PERMISSIONS, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), DENIED_LOCATION_PERMISSIONS, Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -191,6 +194,11 @@ class MapsFragment : Fragment() {
                 findNavController().navigate(R.id.action_mapsFragment_to_detailFragment)
             }
         }
+
+        googleMap.setOnMapLongClickListener { latLng ->
+            createMonumentViewModel.loadLocation(latLng)
+            findNavController().navigate(R.id.action_mapsFragment_to_createMonumentFragment)
+        }
     }
 
     override fun onResume() {
@@ -260,9 +268,4 @@ class MapsFragment : Fragment() {
     private fun requestLocationPermission() {
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
-
-    /*override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }*/
 }

@@ -36,4 +36,8 @@ class LocalMonumentDataSourceImpl(private val monumentDAO: MonumentDAO) : LocalM
     override suspend fun getFilteredMonuments(country: String): List<MonumentDBO> {
         return monumentDAO.getFilteredMonuments(country)
     }
+
+    override suspend fun insertOneMonument(monument: MonumentDBO) {
+        return monumentDAO.insertOneMonument(monument)
+    }
 }

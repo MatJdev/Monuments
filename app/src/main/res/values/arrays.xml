@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="countries_array">
+        <item>Seleccione un país</item>
+        <item>Francia</item>
+        <item>Italia</item>
+        <item>España</item>
+        <item>Reino Unido</item>
+        <item>Alemania</item>
+        <item>Grecia</item>
+        <item>Portugal</item>
+        <item>Rusia</item>
+        <item>Países Bajos</item>
+        <item>Suiza</item>
+        <item>Austria</item>
+        <item>Irlanda</item>
+        <item>Suecia</item>
+        <item>Noruega</item>
+        <item>Finlandia</item>
+        <item>Polonia</item>
+        <item>Hungría</item>
+        <item>República Checa</item>
+        <item>Dinamarca</item>
+    </string-array>
+</resources>
