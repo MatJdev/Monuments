@@ -68,4 +68,11 @@
     <dimen name="new_monument_bin_img_margin_end">-10dp</dimen>
     <dimen name="new_monument_bin_img_margin_bottom">-6dp</dimen>
     <dimen name="new_monument_icon_size">24dp</dimen>
+    <dimen name="dialog_margin_top">120dp</dimen>
+    <dimen name="dialog_delete_monument_card_height">300dp</dimen>
+    <dimen name="fragment_monuments_logo_size">150dp</dimen>
+    <dimen name="fragment_logo_margin_top">150dp</dimen>
+    <dimen name="fragment_text_margin_top">50dp</dimen>
+    <dimen name="fragment_text_padding">10dp</dimen>
+    <dimen name="fragment_text_size">22sp</dimen>
 </resources>

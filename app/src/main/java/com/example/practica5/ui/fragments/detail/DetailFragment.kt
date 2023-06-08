@@ -12,7 +12,10 @@ import com.example.practica5.R
 import com.example.practica5.databinding.FragmentDetailBinding
 import com.example.practica5.domain.model.vo.MonumentVO
 import com.example.practica5.ui.adapter.PhotoAdapter
+import com.example.practica5.ui.fragments.dialog.DeleteMonumentDialogFragment
 import com.example.practica5.ui.fragments.webMonument.WebMonumentViewModel
+import com.example.practica5.utils.MonumentsConstant.DELETE_DIALOG_TAG
+import com.example.practica5.utils.MonumentsConstant.MONUMENT_ZOOM
 import com.example.practica5.utils.MonumentsUtils.renderMonument
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -21,7 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
-class DetailFragment : Fragment(), OnMapReadyCallback {
+class DetailFragment : Fragment(), OnMapReadyCallback, DeleteMonumentDialogFragment.DeleteMonumentDialogListener {
 
     private val binding by lazy { FragmentDetailBinding.inflate(layoutInflater) }
     private val detailViewModel: DetailViewModel by activityViewModels()
@@ -57,11 +60,21 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
                 findNavController().navigate(R.id.action_detailFragment_to_webMonumentFragment)
             }
         }
+
+        detailViewModel.getRemoveComplete().observe(viewLifecycleOwner) { isComplete ->
+            if (isComplete) {
+                detailViewModel.setDeleteToFalse()
+                findNavController().navigate(R.id.action_detailFragment_to_nav_my_monuments)
+            }
+        }
     }
 
-    private fun initListener(monument: MonumentVO) {
-        binding.detailBtnInfoWeb.setOnClickListener {
+    private fun initListener(monument: MonumentVO) = with(binding) {
+        detailBtnInfoWeb.setOnClickListener {
             webMonumentViewModel.loadMonument(monument)
+        }
+        detailBtnRemove.setOnClickListener {
+            showDeleteMonumentDialog(monument)
         }
     }
 
@@ -105,7 +118,17 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
         monument?.let {
             val latLng = LatLng(it.location.latitude, it.location.longitude)
             map.addMarker(MarkerOptions().position(latLng))
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, MONUMENT_ZOOM))
         }
+    }
+
+    private fun showDeleteMonumentDialog(monument: MonumentVO) {
+        val deleteDialogFragment = DeleteMonumentDialogFragment(monument)
+        deleteDialogFragment.listener = this
+        deleteDialogFragment.show(requireParentFragment().childFragmentManager, DELETE_DIALOG_TAG)
+    }
+
+    override fun onDialogAccept(monument: MonumentVO) {
+        detailViewModel.deleteMonument(monument)
     }
 }

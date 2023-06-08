@@ -22,7 +22,7 @@ class MonumentRepositoryImpl(
     override suspend fun getMonuments(): List<MonumentBO> {
         val cachedMonuments = localDataSource.getAllMonuments()
         if (cachedMonuments.isNotEmpty()) {
-            return cachedMonuments.map { MonumentMapper.mapMonumentDbotoBo(it) }
+            return cachedMonuments
         }
 
         val response = remoteDataSource.getMonuments()
@@ -63,16 +63,28 @@ class MonumentRepositoryImpl(
         localDataSource.insertOneMonument(MonumentMapper.mapMonumentBoToDbo(monument))
     }
 
+    override suspend fun getMyMonuments(): List<MonumentBO> {
+        return localDataSource.getMyMonuments()
+    }
+
+    override suspend fun deleteMonument(monument: MonumentBO) {
+        localDataSource.deleteMonument(MonumentMapper.mapMonumentBoToDbo(monument))
+    }
+
+    override suspend fun getFavoriteMonuments(): List<MonumentBO> {
+        return localDataSource.getFavoriteMonuments()
+    }
+
     override suspend fun getMonumentsOrderedByNtoS(): List<MonumentBO> {
-        return localDataSource.getMonumentsOrderByLocationNtoS().map { MonumentMapper.mapMonumentDbotoBo(it) }
+        return localDataSource.getMonumentsOrderByLocationNtoS()
     }
 
     override suspend fun getMonumentsOrderedByEtoW(): List<MonumentBO> {
-        return localDataSource.getMonumentsOrderByLocationEtoW().map { MonumentMapper.mapMonumentDbotoBo(it) }
+        return localDataSource.getMonumentsOrderByLocationEtoW()
     }
 
     override suspend fun getSortedMonuments(sortMode: String): List<MonumentBO> {
-        return localDataSource.getSortedMonuments(sortMode).map { MonumentMapper.mapMonumentDbotoBo(it) }
+        return localDataSource.getSortedMonuments(sortMode)
     }
 
     override suspend fun getUniqueCountries(): List<String> {
@@ -80,7 +92,7 @@ class MonumentRepositoryImpl(
     }
 
     override suspend fun getFilteredMonuments(country: String): List<MonumentBO> {
-        return localDataSource.getFilteredMonuments(country).map { MonumentMapper.mapMonumentDbotoBo(it) }
+        return localDataSource.getFilteredMonuments(country)
     }
 
     override suspend fun getCountryFlag(countryCode: String): String {

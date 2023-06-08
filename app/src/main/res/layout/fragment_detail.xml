@@ -67,6 +67,7 @@
                     app:layout_constraintStart_toEndOf="@id/detailLabelCity"
                     tools:background="@color/black" />
 
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/detailBtnFavorite"
                     style="@style/Widget.Material3.Button.IconButton"
@@ -74,22 +75,39 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/detail__fav_btn_description"
                     app:icon="@drawable/ic__monuments_star_yellow_24"
-                    app:iconSize="@dimen/detail_icon_size"
+                    app:iconSize="35dp"
                     app:iconTint="@color/yellow"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="packed" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/detailBtnInfoWeb"
                     style="@style/Widget.Material3.Button.IconButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/detail_icon_end_margin"
                     android:contentDescription="@string/detail__info_btn_description"
                     app:icon="@drawable/ic__monuments_info_24"
-                    app:iconSize="@dimen/detail_icon_size"
+                    app:iconSize="35dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toStartOf="@id/detailBtnFavorite"
+                    app:layout_constraintHorizontal_chainStyle="packed" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/detailBtnRemove"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:contentDescription="@string/detail__info_btn_description"
+                    android:visibility="visible"
+                    app:icon="@drawable/ic__monuments_bin"
+                    app:iconSize="25dp"
+                    app:iconTint="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/detailBtnInfoWeb"
+                    app:layout_constraintHorizontal_chainStyle="packed" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -126,8 +144,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/detail_mapview_height"
                 android:layout_margin="@dimen/fragment_margin"
-                android:contentDescription="@string/detail__static_map_description"
-                android:clickable="false" />
+                android:clickable="false"
+                android:contentDescription="@string/detail__static_map_description" />
 
         </LinearLayout>
 

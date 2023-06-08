@@ -30,6 +30,8 @@ import com.example.practica5.utils.MonumentsConstant.FASTEST_UPDATE_INTERVAL_MIL
 import com.example.practica5.utils.MonumentsConstant.LOCATION_PERMISSION_REQUEST_CODE
 import com.example.practica5.utils.MonumentsConstant.MONUMENTS_TITLE
 import com.example.practica5.utils.MonumentsConstant.MONUMENT_TARGET
+import com.example.practica5.utils.MonumentsConstant.MONUMENT_ZOOM
+import com.example.practica5.utils.MonumentsConstant.PADDING_MAP
 import com.example.practica5.utils.MonumentsConstant.UPDATE_INTERVAL_MILLIS
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -162,11 +164,11 @@ class MapsFragment : Fragment() {
             }
         }
         val bounds = getLatLngBounds(monumentsList)
-        val padding = 100
+        val padding = PADDING_MAP
 
         if (monumentTarget != null) {
             val latLngTarget = LatLng(monumentTarget.location.latitude, monumentTarget.location.longitude)
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngTarget, 15f))
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngTarget, MONUMENT_ZOOM))
         } else {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
         }
@@ -257,7 +259,7 @@ class MapsFragment : Fragment() {
             fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
                 location?.let {
                     val currentLatLng = LatLng(location.latitude, location.longitude)
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, MONUMENT_ZOOM))
                 }
             }
         } else {

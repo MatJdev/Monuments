@@ -49,7 +49,11 @@ class MonumentsViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun updateFavoriteMonument(monumentId: Long, favorite: Boolean) {
-        UpdateFavoriteMonumentUseCase(monumentRepository, monumentId, favorite)
+        val setFavorite = !favorite
+        val updateFavoriteMonument = UpdateFavoriteMonumentUseCase(monumentRepository, monumentId, setFavorite)
+        viewModelScope.launch {
+            updateFavoriteMonument()
+        }
     }
 
     private val getMonumentsOrderedUseCase = GetMonumentsOrderedUseCase(monumentRepository)

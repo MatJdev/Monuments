@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg__rounded_dialog"
+    android:orientation="vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialog_delete_monument_card_height"
+        android:layout_marginHorizontal="@dimen/content_margin"
+        android:layout_marginTop="@dimen/cardview_margin_vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/fragment_margin"
+            android:layout_marginTop="@dimen/dialog_content_margin_top"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/monuments__delete"
+                android:textSize="@dimen/dialog_btn_text_size"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/dialogBtnClose"
+                style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/monuments__close_btn_desc"
+                app:icon="@drawable/ic__monuments_close_24"
+                app:iconSize="@dimen/dialog_icon_size"
+                app:iconTint="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeWidth="0dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/deleteDialogLabelMssg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/content_margin"
+            android:layout_marginTop="@dimen/dialog_margin_top"
+            android:gravity="center"
+            android:textSize="@dimen/dialog_btn_text_size"
+            tools:text="¿Desea eliminar el monumento?" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <Button
+        android:id="@+id/deleteDialogBtnAccept"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialog_btn_height"
+        android:layout_marginHorizontal="@dimen/dialog_btn_margin_horizontal"
+        android:layout_marginVertical="@dimen/dialog_btn_margin_vertical"
+        android:backgroundTint="@color/md_theme_light_primary"
+        android:text="@string/common__dialog_accept"
+        android:textSize="@dimen/dialog_btn_text_size" />
+
+</LinearLayout>

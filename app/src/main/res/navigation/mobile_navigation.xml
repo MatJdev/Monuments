@@ -22,7 +22,11 @@
         android:id="@+id/nav_favorites"
         android:name="com.example.practica5.ui.fragments.favorites.FavoritesFragment"
         android:label="@string/menu_favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_nav_favorites_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_my_monuments"
@@ -32,6 +36,9 @@
         <action
             android:id="@+id/action_nav_my_monuments_to_createMonumentFragment"
             app:destination="@id/createMonumentFragment" />
+        <action
+            android:id="@+id/action_nav_my_monuments_to_detailFragment"
+            app:destination="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/launcherFragment"
@@ -52,6 +59,12 @@
         <action
             android:id="@+id/action_detailFragment_to_webMonumentFragment"
             app:destination="@id/webMonumentFragment" />
+        <action
+            android:id="@+id/action_detailFragment_to_nav_monuments"
+            app:destination="@id/nav_monuments" />
+        <action
+            android:id="@+id/action_detailFragment_to_nav_my_monuments"
+            app:destination="@id/nav_my_monuments" />
     </fragment>
     <fragment
         android:id="@+id/webMonumentFragment"

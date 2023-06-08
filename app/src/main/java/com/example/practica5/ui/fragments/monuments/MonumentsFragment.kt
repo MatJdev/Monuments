@@ -81,7 +81,7 @@ class MonumentsFragment : Fragment() {
             }
         }
 
-        val destinationChangedListener = NavController.OnDestinationChangedListener { _, destination, _ ->
+        val destinationChangedListener = NavController.OnDestinationChangedListener { _, _, _ ->
             monumentsViewModel.getAllMonuments()
         }
         findNavController().addOnDestinationChangedListener(destinationChangedListener)

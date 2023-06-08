@@ -37,5 +37,11 @@ object MonumentsConstant {
     const val CLOSE_OPTION = 2
     const val IMAGE_BUFFER = 4 * 1024
     const val EOF = -1
+    const val MY_MONUMENTS_TITLE = "My Monuments"
+    const val FAVORITES_TITLE = "Favorites"
+    const val DELETE_DIALOG_TAG = "DeleteGameDialog"
+    const val DEFAULT_LOCATION_LATITUDE = 0.0
+    const val DEFAULT_LOCATION_LONGITUDE = 0.0
+    const val PADDING_MAP = 100
     const val DENIED_PERMISSIONS = "Permiso denegado"
 }

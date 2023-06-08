@@ -38,4 +38,10 @@ interface MonumentDAO {
 
     @Query("SELECT DISTINCT country FROM monument_table")
     suspend fun getUniqueCountries(): List<String>
+
+    @Query("SELECT * FROM monument_table WHERE isFromMyMonuments = 1")
+    suspend fun getMyMonuments(): List<MonumentDBO>
+
+    @Query("SELECT * FROM monument_table WHERE isFavorite = 1")
+    suspend fun getFavoriteMonuments(): List<MonumentDBO>
 }

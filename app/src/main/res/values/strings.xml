@@ -47,4 +47,11 @@
     <string name="newMonuments__file_provider">%1$s.fileprovider</string>
     <string name="newMonuments__prefix_file">JPEG_%1$s_</string>
     <string name="newMonuments_suffix_file">.jpg</string>
+    <string name="myMonuments__text_without_monuments">Without own monuments.\nDo not be afraid, press the add button</string>
+    <string name="favorites__monument_favorite_text">No added favorites\nThe star is your friend</string>
+    <string name="monuments__delete">Borrar</string>
+    <string name="monuments__close_btn_desc">Close btn</string>
+    <string name="monuments__delete_dialog_message">¿Desea eliminar el monumento: %1$s?</string>
+    <string name="monuments__snackbar_text">Se ha eliminado el monumento!</string>
+    <string name="monuments_snackbar_undo">Deshacer</string>
 </resources>
