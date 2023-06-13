@@ -11,8 +11,8 @@ class LocalMonumentDataSourceImpl(private val monumentDAO: MonumentDAO) : LocalM
         return monumentDAO.getAllMonuments().map { MonumentMapper.mapMonumentDbotoBo(it) }
     }
 
-    override suspend fun insertMonument(monument: List<MonumentDBO>) {
-        monumentDAO.insertMonument(monument)
+    override suspend fun insertMonument(monument: List<MonumentBO>) {
+        monumentDAO.insertMonument(monument.map { MonumentMapper.mapMonumentBoToDbo(it) })
     }
 
     override suspend fun updateFavoriteMonument(id: Long, favorite: Boolean) {

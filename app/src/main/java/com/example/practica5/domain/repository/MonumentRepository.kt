@@ -3,7 +3,9 @@ package com.example.practica5.domain.repository
 import com.example.practica5.domain.model.bo.MonumentBO
 
 interface MonumentRepository {
-    suspend fun getMonuments(): List<MonumentBO>
+    suspend fun getMonumentsFromLocal(): List<MonumentBO>
+    suspend fun getMonumentsFromRemote(): List<MonumentBO>
+    suspend fun insertMonument(monument: List<MonumentBO>)
     suspend fun updateMonument(id: Long, favorite: Boolean)
     suspend fun getMonumentsOrderedByNtoS(): List<MonumentBO>
     suspend fun getMonumentsOrderedByEtoW(): List<MonumentBO>

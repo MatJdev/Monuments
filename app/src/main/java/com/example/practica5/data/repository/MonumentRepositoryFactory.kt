@@ -10,13 +10,13 @@ import com.example.practica5.domain.repository.LocalMonumentDataSource
 import com.example.practica5.domain.repository.MonumentRepository
 import com.example.practica5.domain.repository.RemoteMonumentDataSource
 
-object MonumentRepositorySingleton {
+object MonumentRepositoryFactory {
     private lateinit var monumentDAO: MonumentDAO
     private lateinit var applicationContext: MonumentsApp
     private lateinit var localDataSource: LocalMonumentDataSource
     private lateinit var remoteDataSource: RemoteMonumentDataSource
 
-    val monumentRepository: MonumentRepository get() = MonumentRepositoryImpl(localDataSource, remoteDataSource, applicationContext)
+    val monumentRepository: MonumentRepository get() = MonumentRepositoryImpl(localDataSource, remoteDataSource)
 
     fun initialize(context: Context) {
         applicationContext = context.applicationContext as MonumentsApp

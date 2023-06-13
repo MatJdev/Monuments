@@ -44,7 +44,7 @@ class DetailFragment : Fragment(), OnMapReadyCallback, DeleteMonumentDialogFragm
         initToolbar()
         webMonumentViewModel.clearLiveData()
 
-        detailViewModel.monumentLiveData.observe(viewLifecycleOwner) { monument ->
+        detailViewModel.getMonument().observe(viewLifecycleOwner) { monument ->
             binding.renderMonument(monument, adapter)
             initListener(monument)
         }
@@ -114,7 +114,7 @@ class DetailFragment : Fragment(), OnMapReadyCallback, DeleteMonumentDialogFragm
 
     override fun onMapReady(map: GoogleMap) {
         map.uiSettings.setAllGesturesEnabled(false)
-        val monument = detailViewModel.monumentLiveData.value
+        val monument = detailViewModel.getMonument().value
         monument?.let {
             val latLng = LatLng(it.location.latitude, it.location.longitude)
             map.addMarker(MarkerOptions().position(latLng))

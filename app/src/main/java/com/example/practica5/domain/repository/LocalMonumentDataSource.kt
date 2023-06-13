@@ -5,7 +5,7 @@ import com.example.practica5.domain.model.bo.MonumentBO
 
 interface LocalMonumentDataSource {
     suspend fun getAllMonuments(): List<MonumentBO>
-    suspend fun insertMonument(monument: List<MonumentDBO>)
+    suspend fun insertMonument(monument: List<MonumentBO>)
     suspend fun updateFavoriteMonument(id: Long, favorite: Boolean)
     suspend fun getMonumentsOrderByLocationNtoS(): List<MonumentBO>
     suspend fun getMonumentsOrderByLocationEtoW(): List<MonumentBO>

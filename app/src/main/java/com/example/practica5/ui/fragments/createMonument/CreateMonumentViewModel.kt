@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.practica5.data.mapper.MonumentMapper
-import com.example.practica5.data.repository.MonumentRepositorySingleton
+import com.example.practica5.data.repository.MonumentRepositoryFactory
 import com.example.practica5.domain.model.vo.ImageVO
 import com.example.practica5.domain.model.vo.LocationVO
 import com.example.practica5.domain.model.vo.MonumentVO
@@ -51,7 +51,7 @@ class CreateMonumentViewModel : ViewModel() {
                 countryFlag = countryFlag
             )
 
-            val insertMonumentUseCase = InsertMonumentUseCase(MonumentRepositorySingleton.monumentRepository, MonumentMapper.mapMonumentVoToBo(newMonument))
+            val insertMonumentUseCase = InsertMonumentUseCase(MonumentRepositoryFactory.monumentRepository, MonumentMapper.mapMonumentVoToBo(newMonument))
             insertMonumentUseCase()
             imageListMutableLiveData.value = mutableListOf()
             insertionCompleteLiveData.value = true
@@ -59,7 +59,7 @@ class CreateMonumentViewModel : ViewModel() {
     }
 
     private suspend fun getMonumentCountryFlag(countryCode: String): String {
-        val getCountryFlagUseCase = GetCountryFlagUseCase(MonumentRepositorySingleton.monumentRepository, countryCode)
+        val getCountryFlagUseCase = GetCountryFlagUseCase(MonumentRepositoryFactory.monumentRepository, countryCode)
         return getCountryFlagUseCase()
     }
 

@@ -27,7 +27,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/text_margin_top"
                     android:text="@string/monuments__country_filter"
                     android:textSize="@dimen/dialog_title_size"
                     android:textStyle="bold"
@@ -40,6 +39,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/monuments__btn_close_description"
+                    android:layout_marginTop="@dimen/dialog_icon_margin_top"
+                    android:layout_marginEnd="@dimen/dialog_icon_margin_end"
                     app:icon="@drawable/ic__monuments_close_24"
                     app:iconSize="@dimen/dialog_icon_size"
                     app:iconTint="@color/black"

@@ -5,16 +5,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.practica5.data.mapper.MonumentMapper
-import com.example.practica5.data.repository.MonumentRepositorySingleton
+import com.example.practica5.data.repository.MonumentRepositoryFactory
+import com.example.practica5.datasource.Resource
 import com.example.practica5.domain.model.vo.MonumentVO
 import com.example.practica5.domain.usecase.GetMyMonumentsUseCase
+import com.example.practica5.utils.MonumentsConstant.ERROR_LOADING_MY_MONUMENTS
+import com.example.practica5.utils.MonumentsConstant.ERROR_MY_MONUMENTS_FOUND
 import kotlinx.coroutines.launch
 
 class MyMonumentsViewModel : ViewModel() {
     private val myMonumentsMutableLiveData = MutableLiveData<List<MonumentVO>?>()
     fun getMyMonumentsList(): LiveData<List<MonumentVO>?> = myMonumentsMutableLiveData
 
-    private val getMyMonumentsUseCase: GetMyMonumentsUseCase = GetMyMonumentsUseCase(MonumentRepositorySingleton.monumentRepository)
+    private val resourceLiveData = MutableLiveData<Resource<List<MonumentVO>, String>>()
+    fun getResourceState(): LiveData<Resource<List<MonumentVO>, String>> = resourceLiveData
+
+    private val getMyMonumentsUseCase: GetMyMonumentsUseCase = GetMyMonumentsUseCase(MonumentRepositoryFactory.monumentRepository)
 
     init {
         getMyMonuments()
@@ -22,12 +28,20 @@ class MyMonumentsViewModel : ViewModel() {
 
     fun getMyMonuments() {
         viewModelScope.launch {
-            val result = getMyMonumentsUseCase()
-            val monumentListVO = result?.map { MonumentMapper.mapMonumentBoToVo(it) }
-            if (!result.isNullOrEmpty()) {
-                myMonumentsMutableLiveData.postValue(monumentListVO)
-            } else {
-                myMonumentsMutableLiveData.postValue(emptyList())
+            resourceLiveData.value = Resource.Loading
+
+            try {
+                val result = getMyMonumentsUseCase()
+                val monumentListVO = result?.map { MonumentMapper.mapMonumentBoToVo(it) }
+                if (!result.isNullOrEmpty()) {
+                    myMonumentsMutableLiveData.postValue(monumentListVO)
+                    resourceLiveData.postValue(Resource.Success(monumentListVO as List<MonumentVO>))
+                } else {
+                    myMonumentsMutableLiveData.postValue(emptyList())
+                    resourceLiveData.postValue(Resource.Error(ERROR_MY_MONUMENTS_FOUND))
+                }
+            } catch (e: Exception) {
+                resourceLiveData.postValue(Resource.Error(ERROR_LOADING_MY_MONUMENTS))
             }
         }
     }

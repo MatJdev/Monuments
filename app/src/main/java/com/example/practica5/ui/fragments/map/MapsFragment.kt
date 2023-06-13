@@ -178,7 +178,7 @@ class MapsFragment : Fragment() {
         val monumentsViewModel: MonumentsViewModel by activityViewModels {
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
         }
-        return monumentsViewModel.monumentsListLiveData.value.orEmpty()
+        return monumentsViewModel.getMonumentsList().value.orEmpty()
     }
 
     private fun setupMapListeners() {

@@ -26,6 +26,7 @@ import com.example.practica5.R
 import com.example.practica5.databinding.CustomFilterCountryDialogBinding
 import com.example.practica5.databinding.CustomSortDialogBinding
 import com.example.practica5.databinding.FragmentMonumentsBinding
+import com.example.practica5.datasource.Resource
 import com.example.practica5.domain.model.vo.MonumentVO
 import com.example.practica5.ui.activity.NavigationActivity
 import com.example.practica5.ui.adapter.CountryAdapter
@@ -71,7 +72,7 @@ class MonumentsFragment : Fragment() {
             activity.onBackPressedDispatcher.addCallback(viewLifecycleOwner){}
         }
         mainToolbar.title = MONUMENTS_TITLE
-        monumentsViewModel.monumentsListLiveData.observe(viewLifecycleOwner) { monuments ->
+        monumentsViewModel.getMonumentsList().observe(viewLifecycleOwner) { monuments ->
             adapter.submitList(monuments) { scrollToFirstPosition() }
         }
         initToolbarMenu()
@@ -85,6 +86,19 @@ class MonumentsFragment : Fragment() {
             monumentsViewModel.getAllMonuments()
         }
         findNavController().addOnDestinationChangedListener(destinationChangedListener)
+
+        monumentsViewModel.getResourceState().observe(viewLifecycleOwner) { resource ->
+            with(binding) {
+                when(resource) {
+                    is Resource.Loading -> monumentsProgressBar.visibility = View.VISIBLE
+                    is Resource.Success -> monumentsProgressBar.visibility = View.GONE
+                    is Resource.Error -> {
+                        monumentsProgressBar.visibility = View.GONE
+                        showErrorDialog(resource.error)
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -190,6 +204,15 @@ class MonumentsFragment : Fragment() {
             alertDialog.dismiss()
         }
 
+        alertDialog.show()
+    }
+
+    private fun showErrorDialog(errorMessage: String) {
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.common__dialog_error))
+            .setMessage(errorMessage)
+            .setPositiveButton(getString(R.string.common__dialog_accept), null)
+            .create()
         alertDialog.show()
     }
 }

@@ -54,5 +54,14 @@
         app:maxImageSize="@dimen/fab_max_img_size"
         app:srcCompat="@drawable/ic__monuments_add_24" />
 
+    <ProgressBar
+        android:id="@+id/myMonumentsProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

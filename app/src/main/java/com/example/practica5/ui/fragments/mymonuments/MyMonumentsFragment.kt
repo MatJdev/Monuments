@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -12,6 +13,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.practica5.R
 import com.example.practica5.databinding.FragmentMymonumentsBinding
+import com.example.practica5.datasource.Resource
 import com.example.practica5.domain.model.vo.MonumentVO
 import com.example.practica5.ui.activity.NavigationActivity
 import com.example.practica5.ui.adapter.MyMonumentsAdapter
@@ -59,6 +61,19 @@ class MyMonumentsFragment : Fragment() {
             myMonumentsViewModel.getMyMonuments()
         }
         findNavController().addOnDestinationChangedListener(destinationChangedListener)
+
+        myMonumentsViewModel.getResourceState().observe(viewLifecycleOwner) { resource ->
+            with(binding) {
+                when(resource) {
+                    is Resource.Loading -> myMonumentsProgressBar.visibility = View.VISIBLE
+                    is Resource.Success -> myMonumentsProgressBar.visibility = View.GONE
+                    is Resource.Error -> {
+                        myMonumentsProgressBar.visibility = View.GONE
+                        showErrorDialog(resource.error)
+                    }
+                }
+            }
+        }
     }
 
     private fun initToolbar() {
@@ -94,5 +109,14 @@ class MyMonumentsFragment : Fragment() {
         } else {
             hideViews(myMonumentsImgLogo, myMonumentsLabelWithoutMonuments)
         }
+    }
+
+    private fun showErrorDialog(errorMessage: String) {
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.common__dialog_error))
+            .setMessage(errorMessage)
+            .setPositiveButton(getString(R.string.common__dialog_accept), null)
+            .create()
+        alertDialog.show()
     }
 }

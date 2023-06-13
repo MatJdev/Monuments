@@ -44,4 +44,9 @@ object MonumentsConstant {
     const val DEFAULT_LOCATION_LONGITUDE = 0.0
     const val PADDING_MAP = 100
     const val DENIED_PERMISSIONS = "Permiso denegado"
+    const val ERROR_FAVORITES_FOUND = "No favorite monuments found"
+    const val ERROR_LOADING_FAVORITES = "Error loading favorite monuments"
+    const val ERROR_MY_MONUMENTS_FOUND = "No favorite monuments found"
+    const val ERROR_LOADING_MY_MONUMENTS = "Error loading favorite monuments"
+    const val ERROR_LOADING_MONUMENTS = "Error loading monuments"
 }
