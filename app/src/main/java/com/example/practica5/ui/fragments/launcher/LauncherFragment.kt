@@ -11,7 +11,9 @@ import com.example.practica5.R
 import androidx.navigation.fragment.findNavController
 import com.example.practica5.databinding.FragmentLauncherBinding
 import com.example.practica5.utils.MonumentsConstant.DELAY_MILLIS
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LauncherFragment : Fragment() {
 
     private val binding by lazy { FragmentLauncherBinding.inflate(layoutInflater) }

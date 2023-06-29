@@ -12,9 +12,12 @@ import com.example.practica5.utils.MonumentsConstant.EMPTY_INFO
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
+import javax.inject.Inject
 
-class MapsViewModel : ViewModel() {
+@HiltViewModel
+class MapsViewModel @Inject constructor(): ViewModel() {
 
     fun getAddressFromLocation(context: Context, latitude: Double, longitude: Double): String {
         val geocoder = Geocoder(context, Locale.getDefault())

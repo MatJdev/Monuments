@@ -5,23 +5,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.practica5.data.mapper.MonumentMapper
-import com.example.practica5.data.repository.MonumentRepositoryFactory
 import com.example.practica5.datasource.Resource
 import com.example.practica5.domain.model.vo.MonumentVO
 import com.example.practica5.domain.usecase.GetFavoriteMonumentsUseCase
 import com.example.practica5.utils.MonumentsConstant.ERROR_FAVORITES_FOUND
 import com.example.practica5.utils.MonumentsConstant.ERROR_LOADING_FAVORITES
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FavoritesViewModel : ViewModel() {
+@HiltViewModel
+class FavoritesViewModel @Inject constructor(private val getFavoriteMonumentsUseCase: GetFavoriteMonumentsUseCase) :
+    ViewModel() {
     private val favMonumentsMutableLiveData = MutableLiveData<List<MonumentVO>?>()
     fun getFavMonumentsList(): LiveData<List<MonumentVO>?> = favMonumentsMutableLiveData
 
     private val resourceLiveData = MutableLiveData<Resource<List<MonumentVO>, String>>()
     fun getResourceState(): LiveData<Resource<List<MonumentVO>, String>> = resourceLiveData
-
-    private val getFavoriteMonumentsUseCase: GetFavoriteMonumentsUseCase = GetFavoriteMonumentsUseCase(
-        MonumentRepositoryFactory.monumentRepository)
 
     init {
         getFavMonuments()

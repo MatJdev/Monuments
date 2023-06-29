@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.practica5.R
@@ -21,11 +22,13 @@ import com.example.practica5.ui.fragments.detail.DetailViewModel
 import com.example.practica5.utils.MonumentsConstant.FAVORITES_TITLE
 import com.example.practica5.utils.MonumentsUtils.hideViews
 import com.example.practica5.utils.MonumentsUtils.showViews
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FavoritesFragment : Fragment() {
 
     private val binding by lazy { FragmentFavoritesBinding.inflate(layoutInflater) }
-    private val favoritesViewModel: FavoritesViewModel by activityViewModels()
+    private val favoritesViewModel: FavoritesViewModel by viewModels()
     private val detailViewModel: DetailViewModel by activityViewModels()
     private val adapter: MyMonumentsAdapter by lazy {
         MyMonumentsAdapter { monument -> onClickItemSelected(monument) }

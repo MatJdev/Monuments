@@ -10,7 +10,9 @@ import androidx.fragment.app.DialogFragment
 import com.example.practica5.R
 import com.example.practica5.databinding.CustomDialogDeleteMonumentsBinding
 import com.example.practica5.domain.model.vo.MonumentVO
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DeleteMonumentDialogFragment(private val monument: MonumentVO) : DialogFragment() {
     private val binding by lazy { CustomDialogDeleteMonumentsBinding.inflate(layoutInflater) }
 

@@ -46,7 +46,7 @@ object MonumentsConstant {
     const val DENIED_PERMISSIONS = "Permiso denegado"
     const val ERROR_FAVORITES_FOUND = "No favorite monuments found"
     const val ERROR_LOADING_FAVORITES = "Error loading favorite monuments"
-    const val ERROR_MY_MONUMENTS_FOUND = "No favorite monuments found"
-    const val ERROR_LOADING_MY_MONUMENTS = "Error loading favorite monuments"
+    const val ERROR_MY_MONUMENTS_FOUND = "No My Monuments found"
+    const val ERROR_LOADING_MY_MONUMENTS = "Error loading my monuments"
     const val ERROR_LOADING_MONUMENTS = "Error loading monuments"
 }

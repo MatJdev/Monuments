@@ -23,7 +23,9 @@ import com.example.practica5.databinding.FragmentWebMonumentBinding
 import com.example.practica5.domain.model.vo.MonumentVO
 import com.example.practica5.utils.MonumentsConstant.EMAIL_SUBJECT
 import com.example.practica5.utils.MonumentsConstant.MONUMENT_TARGET
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class WebMonumentFragment : Fragment() {
 
     private val binding by lazy { FragmentWebMonumentBinding.inflate(layoutInflater) }

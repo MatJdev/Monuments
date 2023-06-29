@@ -18,7 +18,6 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -38,14 +37,14 @@ import com.example.practica5.utils.MonumentsConstant.MONUMENT_ID
 import com.example.practica5.utils.MonumentsConstant.MONUMENT_NAME
 import com.example.practica5.utils.MonumentsConstant.SORTED_EAST_WEST
 import com.example.practica5.utils.MonumentsConstant.SORTED_NORTH_SOUTH
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MonumentsFragment : Fragment() {
 
     private val binding by lazy { FragmentMonumentsBinding.inflate(layoutInflater) }
-    private val monumentsViewModel: MonumentsViewModel by activityViewModels {
-        ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
-    }
+    private val monumentsViewModel: MonumentsViewModel by activityViewModels()
     private val adapter: MonumentsListAdapter by lazy {
         MonumentsListAdapter(
             { monument -> onClickItemSelected(monument) },
@@ -195,6 +194,7 @@ class MonumentsFragment : Fragment() {
 
         val countryAdapter = CountryAdapter { country ->
             alertDialog.dismiss()
+            monumentsViewModel.updateCountrySelected(country)
             monumentsViewModel.getFilteredMonumentsByCountry(country)
         }
         binding.filterDialogListCounties.adapter = countryAdapter

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.practica5.R
@@ -25,11 +26,13 @@ import com.example.practica5.utils.MonumentsConstant.MY_MONUMENTS_TITLE
 import com.example.practica5.utils.MonumentsUtils.hideViews
 import com.example.practica5.utils.MonumentsUtils.showViews
 import com.google.android.gms.maps.model.LatLng
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyMonumentsFragment : Fragment() {
 
     private val binding by lazy { FragmentMymonumentsBinding.inflate(layoutInflater) }
-    private val myMonumentsViewModel: MyMonumentsViewModel by activityViewModels()
+    private val myMonumentsViewModel: MyMonumentsViewModel by viewModels()
     private val adapter: MyMonumentsAdapter by lazy {
         MyMonumentsAdapter { monument -> onClickItemSelected(monument) }
     }

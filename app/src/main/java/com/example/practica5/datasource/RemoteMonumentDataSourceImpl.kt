@@ -4,8 +4,10 @@ import com.example.practica5.data.mapper.MonumentMapper
 import com.example.practica5.data.network.MonumentService
 import com.example.practica5.domain.model.bo.MonumentBO
 import com.example.practica5.domain.repository.RemoteMonumentDataSource
+import javax.inject.Inject
 
-class RemoteMonumentDataSourceImpl(private val monumentService: MonumentService) : RemoteMonumentDataSource {
+class RemoteMonumentDataSourceImpl @Inject constructor(private val monumentService: MonumentService) :
+    RemoteMonumentDataSource {
     override suspend fun getMonuments(): List<MonumentBO> {
         return monumentService.getMonuments().map { MonumentMapper.mapMonumentDtoToBo(it) }
     }

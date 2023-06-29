@@ -6,8 +6,9 @@ import android.location.Geocoder
 import com.example.practica5.domain.LocationHelper
 import java.io.IOException
 import java.util.Locale
+import javax.inject.Inject
 
-class LocationHelperImpl(private val context: Context) : LocationHelper {
+class LocationHelperImpl @Inject constructor(private val context: Context) : LocationHelper {
     override suspend fun getCountryFromLocation(latitude: Double, longitude: Double): String {
         val geocoder = Geocoder(context, Locale.getDefault())
         var country: String? = null

@@ -4,8 +4,9 @@ import com.example.practica5.domain.model.bo.MonumentBO
 import com.example.practica5.domain.repository.MonumentRepository
 import com.example.practica5.utils.MonumentsConstant.MONUMENT_ID
 import com.example.practica5.utils.MonumentsConstant.MONUMENT_NAME
+import javax.inject.Inject
 
-class GetMonumentsOrderedUseCase(private val monumentRepository: MonumentRepository) {
+class GetMonumentsOrderedUseCase @Inject constructor(private val monumentRepository: MonumentRepository) {
     suspend operator fun invoke(orderBy: OrderBy): List<MonumentBO> {
         return when (orderBy) {
             OrderBy.LATITUDE -> monumentRepository.getMonumentsOrderedByNtoS()

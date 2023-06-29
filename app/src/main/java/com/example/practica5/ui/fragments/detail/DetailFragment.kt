@@ -23,7 +23,9 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailFragment : Fragment(), OnMapReadyCallback, DeleteMonumentDialogFragment.DeleteMonumentDialogListener {
 
     private val binding by lazy { FragmentDetailBinding.inflate(layoutInflater) }

@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -43,17 +44,17 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class MapsFragment : Fragment() {
 
-    private val monumentsViewModel: MonumentsViewModel by activityViewModels {
-        ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
-    }
+    private val monumentsViewModel: MonumentsViewModel by activityViewModels()
     private val detailViewModel: DetailViewModel by activityViewModels()
-    private val mapsViewModel: MapsViewModel by activityViewModels()
+    private val mapsViewModel: MapsViewModel by viewModels()
     private val binding by lazy { FragmentMapsBinding.inflate(layoutInflater) }
     private val createMonumentViewModel: CreateMonumentViewModel by activityViewModels()
 

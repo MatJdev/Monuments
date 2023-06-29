@@ -3,8 +3,9 @@ package com.example.practica5.domain.usecase
 import com.example.practica5.domain.LocationHelper
 import com.example.practica5.domain.model.bo.MonumentBO
 import com.example.practica5.domain.repository.MonumentRepository
+import javax.inject.Inject
 
-class GetMonumentsUseCase(
+class GetMonumentsUseCase @Inject constructor(
     private val monumentRepository: MonumentRepository,
     private val locationHelper: LocationHelper
 ) {

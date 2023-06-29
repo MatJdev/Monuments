@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.practica5.data.mapper.MonumentMapper
-import com.example.practica5.data.repository.MonumentRepositoryFactory
 import com.example.practica5.domain.model.vo.ImageVO
 import com.example.practica5.domain.model.vo.LocationVO
 import com.example.practica5.domain.model.vo.MonumentVO
@@ -14,9 +13,16 @@ import com.example.practica5.domain.usecase.GetCountryFlagUseCase
 import com.example.practica5.domain.usecase.InsertMonumentUseCase
 import com.example.practica5.utils.MonumentsUtils.getCountryCodeFromLocation
 import com.google.android.gms.maps.model.LatLng
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CreateMonumentViewModel : ViewModel() {
+@HiltViewModel
+class CreateMonumentViewModel @Inject constructor(
+    private var insertMonumentUseCase: InsertMonumentUseCase,
+    private var getCountryFlagUseCase: GetCountryFlagUseCase
+) :
+    ViewModel() {
     private val locationMutableLiveData = MutableLiveData<LatLng>()
     val locationLiveData: LiveData<LatLng> = locationMutableLiveData
 
@@ -50,17 +56,16 @@ class CreateMonumentViewModel : ViewModel() {
                 countryCode = countryCode,
                 countryFlag = countryFlag
             )
-
-            val insertMonumentUseCase = InsertMonumentUseCase(MonumentRepositoryFactory.monumentRepository, MonumentMapper.mapMonumentVoToBo(newMonument))
-            insertMonumentUseCase()
+            insertMonumentUseCase.setMonument(MonumentMapper.mapMonumentVoToBo(newMonument))
+            insertMonumentUseCase.invoke()
             imageListMutableLiveData.value = mutableListOf()
             insertionCompleteLiveData.value = true
         }
     }
 
     private suspend fun getMonumentCountryFlag(countryCode: String): String {
-        val getCountryFlagUseCase = GetCountryFlagUseCase(MonumentRepositoryFactory.monumentRepository, countryCode)
-        return getCountryFlagUseCase()
+        getCountryFlagUseCase.setCountryCode(countryCode)
+        return getCountryFlagUseCase.invoke()
     }
 
     fun addImage(imageUri: String) {

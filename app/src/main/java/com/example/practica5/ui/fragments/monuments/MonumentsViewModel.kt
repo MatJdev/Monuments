@@ -4,9 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.practica5.MonumentsApp
 import com.example.practica5.data.mapper.MonumentMapper
-import com.example.practica5.data.repository.MonumentRepositoryFactory
 import com.example.practica5.datasource.Resource
 import com.example.practica5.domain.model.vo.MonumentVO
 import com.example.practica5.domain.usecase.GetFilteredMonumentsByCountryUseCase
@@ -21,22 +19,24 @@ import com.example.practica5.utils.MonumentsConstant.MONUMENT_ID
 import com.example.practica5.utils.MonumentsConstant.MONUMENT_NAME
 import com.example.practica5.utils.MonumentsConstant.SORTED_EAST_WEST
 import com.example.practica5.utils.MonumentsConstant.SORTED_NORTH_SOUTH
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MonumentsViewModel : ViewModel() {
+@HiltViewModel
+class MonumentsViewModel @Inject constructor(
+    private val getMonumentsUseCase: GetMonumentsUseCase,
+    private val getMonumentsOrderedUseCase: GetMonumentsOrderedUseCase,
+    private val updateFavoriteMonumentUseCase: UpdateFavoriteMonumentUseCase,
+    private val getUniqueCountriesUseCase: GetUniqueCountriesUseCase,
+    private val getFilteredMonumentsByCountryUseCase: GetFilteredMonumentsByCountryUseCase
+) : ViewModel() {
 
     private val monumentsMutableLiveData = MutableLiveData<List<MonumentVO>?>()
     fun getMonumentsList(): LiveData<List<MonumentVO>?> = monumentsMutableLiveData
 
     private val resourceLiveData = MutableLiveData<Resource<List<MonumentVO>, String>>()
     fun getResourceState(): LiveData<Resource<List<MonumentVO>, String>> = resourceLiveData
-
-    private val getMonumentsUseCase by lazy {
-        GetMonumentsUseCase(
-            MonumentRepositoryFactory.monumentRepository,
-            MonumentsApp.getInstance().getLocationHelper()
-        )
-    }
 
     init {
         getAllMonuments()
@@ -60,14 +60,10 @@ class MonumentsViewModel : ViewModel() {
 
     fun updateFavoriteMonument(monumentId: Long, favorite: Boolean) {
         val setFavorite = !favorite
-        val updateFavoriteMonument =
-            UpdateFavoriteMonumentUseCase(MonumentRepositoryFactory.monumentRepository, monumentId, setFavorite)
         viewModelScope.launch {
-            updateFavoriteMonument()
+            updateFavoriteMonumentUseCase.invoke(monumentId, setFavorite)
         }
     }
-
-    private val getMonumentsOrderedUseCase = GetMonumentsOrderedUseCase(MonumentRepositoryFactory.monumentRepository)
 
     fun getSortedMonuments(sortMode: String) {
         viewModelScope.launch {
@@ -89,8 +85,7 @@ class MonumentsViewModel : ViewModel() {
     }
 
     suspend fun getUniqueCountries(): List<String> {
-        val uniqueCountries = GetUniqueCountriesUseCase(MonumentRepositoryFactory.monumentRepository)
-        val list = uniqueCountries().toMutableList()
+        val list = getUniqueCountriesUseCase.invoke().toMutableList()
         list.add(ALL_COUNTRIES)
         return list
     }
@@ -103,11 +98,12 @@ class MonumentsViewModel : ViewModel() {
                 if (country == ALL_COUNTRIES) {
                     getAllMonuments()
                 } else {
-                    val getFilteredMonumentsByCountryUseCase =
-                        GetFilteredMonumentsByCountryUseCase(MonumentRepositoryFactory.monumentRepository, country)
-                    resourceLiveData.value = Resource.Success(getFilteredMonumentsByCountryUseCase().map { MonumentMapper.mapMonumentBoToVo(it) })
+                    val filteredMonuments = getFilteredMonumentsByCountryUseCase.invoke()
+                    resourceLiveData.value = Resource.Success(filteredMonuments.map {
+                        MonumentMapper.mapMonumentBoToVo(it)
+                    })
                     monumentsMutableLiveData.value =
-                        getFilteredMonumentsByCountryUseCase().map { MonumentMapper.mapMonumentBoToVo(it) }
+                        filteredMonuments.map { MonumentMapper.mapMonumentBoToVo(it) }
                 }
             } catch (e: Exception) {
                 resourceLiveData.value = Resource.Error(ERROR_LOADING_MONUMENTS)
@@ -117,5 +113,9 @@ class MonumentsViewModel : ViewModel() {
 
     fun getMonumentByTitle(title: String): MonumentVO? {
         return getMonumentsList().value?.find { monument -> monument.name == title }
+    }
+
+    fun updateCountrySelected(newCountry: String) {
+        getFilteredMonumentsByCountryUseCase.setCountry(newCountry)
     }
 }

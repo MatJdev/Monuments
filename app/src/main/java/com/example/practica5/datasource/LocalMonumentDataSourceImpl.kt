@@ -5,8 +5,9 @@ import com.example.practica5.data.database.entities.MonumentDBO
 import com.example.practica5.data.mapper.MonumentMapper
 import com.example.practica5.domain.model.bo.MonumentBO
 import com.example.practica5.domain.repository.LocalMonumentDataSource
+import javax.inject.Inject
 
-class LocalMonumentDataSourceImpl(private val monumentDAO: MonumentDAO) : LocalMonumentDataSource {
+class LocalMonumentDataSourceImpl @Inject constructor(private val monumentDAO: MonumentDAO) : LocalMonumentDataSource {
     override suspend fun getAllMonuments(): List<MonumentBO> {
         return monumentDAO.getAllMonuments().map { MonumentMapper.mapMonumentDbotoBo(it) }
     }
