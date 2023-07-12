@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common__sort">sort</string>
+    <string name="common__title">Monuments</string>
+    <string name="common__filter">filter</string>
+    <string name="common__dialog_accept">Aceptar</string>
+    <string name="common__dialog_error">Error</string>
+    <string name="common__save">Guardar</string>
+    <string name="common__cancel">Cancelar</string>
+    <string name="menu_monuments">Monuments</string>
+    <string name="menu_favorites">Favorites</string>
+    <string name="menu_my_monuments">My Monuments</string>
+</resources>

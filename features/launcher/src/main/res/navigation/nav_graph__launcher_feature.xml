@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph__launcher_feature"
+    app:startDestination="@id/launcherFragment"
+    tools:ignore="UnusedNavigation">
+
+    <fragment
+        android:id="@+id/launcherFragment"
+        android:name="com.example.practica5.launcher.ui.fragment.LauncherFragment"
+        android:label="Launcher"
+        tools:layout="@layout/fragment_launcher">
+
+        <action
+            android:id="@+id/go_to_home"
+            app:destination="@id/nav_graph__home_feature"
+            app:enterAnim="@anim/nav_default_pop_enter_anim"
+            app:exitAnim="@anim/nav_default_pop_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/launcherFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <include app:graph="@navigation/nav_graph__home_feature" />
+
+</navigation>

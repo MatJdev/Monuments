@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/launcherFragment">
+    app:startDestination="@id/nav_graph__launcher_feature">
 
-    <fragment
+    <include app:graph="@navigation/nav_graph__launcher_feature" />
+    <!--<fragment
         android:id="@+id/nav_monuments"
-        android:name="com.example.practica5.ui.fragments.monuments.MonumentsFragment"
+        android:name="com.example.practica5.home.ui.fragment.MonumentsFragment"
         android:label="@string/menu_monuments"
         tools:layout="@layout/fragment_monuments" >
         <action
@@ -20,7 +21,7 @@
 
     <fragment
         android:id="@+id/nav_favorites"
-        android:name="com.example.practica5.ui.fragments.favorites.FavoritesFragment"
+        android:name="com.example.practica5.favorites.ui.fragment.FavoritesFragment"
         android:label="@string/menu_favorites"
         tools:layout="@layout/fragment_favorites" >
         <action
@@ -30,7 +31,7 @@
 
     <fragment
         android:id="@+id/nav_my_monuments"
-        android:name="com.example.practica5.ui.fragments.mymonuments.MyMonumentsFragment"
+        android:name="com.example.practica5.mymonuments.ui.fragment.MyMonumentsFragment"
         android:label="@string/menu_my_monuments"
         tools:layout="@layout/fragment_mymonuments" >
         <action
@@ -42,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/launcherFragment"
-        android:name="com.example.practica5.ui.fragments.launcher.LauncherFragment"
+        android:name="com.example.practica5.launcher.ui.fragment.LauncherFragment"
         android:label="fragment_launcher"
         tools:layout="@layout/fragment_launcher" >
         <action
@@ -53,7 +54,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.example.practica5.ui.fragments.detail.DetailFragment"
+        android:name="com.example.practica5.home.ui.fragment.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail" >
         <action
@@ -68,7 +69,7 @@
     </fragment>
     <fragment
         android:id="@+id/webMonumentFragment"
-        android:name="com.example.practica5.ui.fragments.webMonument.WebMonumentFragment"
+        android:name="com.example.practica5.home.ui.fragment.WebMonumentFragment"
         android:label="fragment_web_monument"
         tools:layout="@layout/fragment_web_monument" >
         <action
@@ -77,7 +78,7 @@
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
-        android:name="com.example.practica5.ui.fragments.map.MapsFragment"
+        android:name="com.example.practica5.map.ui.fragment.MapsFragment"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" >
         <action
@@ -92,7 +93,7 @@
     </fragment>
     <fragment
         android:id="@+id/createMonumentFragment"
-        android:name="com.example.practica5.ui.fragments.createMonument.CreateMonumentFragment"
+        android:name="com.example.practica5.newmonument.ui.fragment.CreateMonumentFragment"
         android:label="fragment_create_monument"
         tools:layout="@layout/fragment_create_monument" >
         <action
@@ -101,5 +102,5 @@
         <action
             android:id="@+id/action_createMonumentFragment_to_mapsFragment"
             app:destination="@id/mapsFragment" />
-    </fragment>
+    </fragment>-->
 </navigation>

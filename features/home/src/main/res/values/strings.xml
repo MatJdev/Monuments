@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="monuments_title">Monuments</string>
+    <string name="monuments__img_main_description">Monument main img</string>
+    <string name="monuments_fab_description">fab button</string>
+    <string name="monuments__sort_monuments">Ordenar monumentos</string>
+    <string name="monuments__sort_id">Ordenar por Fecha de creación</string>
+    <string name="monuments__sort_name">Ordenar por nombre</string>
+    <string name="monuments__sort_n_to_s">Ordenar de Norte a Sur</string>
+    <string name="monuments__sort_e_to_w">Ordenar de Este a Oeste</string>
+    <string name="monuments__country_filter">Filtrar por país</string>
+    <string name="monuments__btn_close_description">Close dialog</string>
+    <string name="monuments__country_flag_img">flag country img</string>
+    <string name="monuments__delete">Borrar</string>
+    <string name="monuments__close_btn_desc">Close btn</string>
+    <string name="monuments__delete_dialog_message">¿Desea eliminar el monumento: %1$s?</string>
+    <string name="monuments__snackbar_text">Se ha eliminado el monumento!</string>
+    <string name="monuments_snackbar_undo">Deshacer</string>
+    <string name="detail__info_btn_description">Info button</string>
+    <string name="detail__fav_btn_description">Fav button</string>
+    <string name="detail__static_map_description">Static map</string>
+    <string name="webMonument__google_maps">google maps</string>
+    <string name="webMonument__email">email</string>
+    <string name="webMonument__message_email">Sabías que el monumento %1$s se encuentra en %2$s. Conócela un poco más aquí: %3$s</string>
+    <string name="webMonument__empty_url_info">https://en.wikipedia.org/wiki/%1$s</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="newMonuments__monument_name">Name</string>
+    <string name="newMonuments__monument_description">Description</string>
+    <string name="newMonuments__monument_city">City</string>
+    <string name="newMonuments__monumnet_location">Location</string>
+    <string name="newMonuments__monument_images">Images</string>
+    <string name="newMonuments__monument_image_description">Monument image</string>
+    <string name="newMonuments__add_img_description">Add Image</string>
+    <string name="newMonuments__map_location_description">Location map</string>
+    <string name="newMonuments__select_image">Seleccione desde donde quiere importar la imagen</string>
+    <string name="newMonuments__max_50_text">%1$s/50 caracteres Max.</string>
+    <string name="newMonuments__max_250_text">%1$s/250 caracteres Max.</string>
+    <string name="newMonuments__file_provider">%1$s.fileprovider</string>
+    <string name="newMonuments__prefix_file">JPEG_%1$s_</string>
+    <string name="newMonuments_suffix_file">.jpg</string>
+</resources>

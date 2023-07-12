@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph__home_feature"
+    app:startDestination="@id/monumentsFragment"
+    tools:ignore="UnusedNavigation">
+
+    <fragment
+        android:id="@+id/monumentsFragment"
+        android:name="com.example.practica5.home.ui.fragment.MonumentsFragment"
+        android:label="Monuments"
+        tools:layout="@layout/fragment_monuments" >
+
+        <action
+            android:id="@+id/action_monumentsFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+
+        <action
+            android:id="@+id/action_nav_monuments_to_mapsFragment"
+            app:destination="@id/nav_graph__map_feature" />
+
+        <action
+            android:id="@+id/action_monumentsFragment_to_favoritesFragment"
+            app:destination="@id/favoritesFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.example.practica5.home.ui.fragment.DetailFragment"
+        android:label="Detail"
+        tools:layout="@layout/fragment_detail" >
+        <action
+            android:id="@+id/action_detailFragment_to_webMonumentFragment"
+            app:destination="@id/webMonumentFragment" />
+
+        <action
+            android:id="@+id/action_detailFragment_to_nav_my_monuments"
+            app:destination="@id/nav_graph__my_monuments_feature" />
+    </fragment>
+    <fragment
+        android:id="@+id/webMonumentFragment"
+        android:name="com.example.practica5.home.ui.fragment.WebMonumentFragment"
+        android:label="WebMonumentFragment">
+
+        <action
+            android:id="@+id/action_webMonumentFragment_to_mapsFragment"
+            app:destination="@id/nav_graph__map_feature" />
+    </fragment>
+
+    <include app:graph="@navigation/nav_graph__map_feature" />
+    <include app:graph="@navigation/nav_graph__my_monuments_feature" />
+    <include app:graph="@navigation/nav_graph__favorites_feature" />
+</navigation>

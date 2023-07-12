@@ -77,4 +77,11 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
+
+    implementation project(path: ':common')
+    implementation project(path: ':features:launcher')
+    implementation project(path: ':features:home')
+    implementation project(path: ':features:favorites')
+    implementation project(path: ':navigation')
+    implementation project(path: ':commonFeatures')
 }
