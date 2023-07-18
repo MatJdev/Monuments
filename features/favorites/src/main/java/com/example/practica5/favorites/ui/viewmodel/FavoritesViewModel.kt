@@ -1,7 +1,5 @@
 package com.example.practica5.favorites.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.practica5.common.Resource
@@ -12,17 +10,18 @@ import com.example.practica5.common.util.MonumentsConstant.ERROR_LOADING_FAVORIT
 import com.example.practica5.model.bo.monument.MonumentBO
 import com.example.practica5.model.vo.MonumentVO
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FavoritesViewModel @Inject constructor(private val getFavoriteMonumentsUseCase: GetFavoriteMonumentsUseCase) :
     ViewModel() {
-    private val favMonumentsMutableLiveData = MutableLiveData<List<MonumentVO>?>()
-    fun getFavMonumentsList(): LiveData<List<MonumentVO>?> = favMonumentsMutableLiveData
 
-    private val resourceLiveData = MutableLiveData<Resource<List<MonumentVO>, String>>()
-    fun getResourceState(): LiveData<Resource<List<MonumentVO>, String>> = resourceLiveData
+    private val resourceStateFlow = MutableStateFlow<Resource<List<MonumentVO>, String>>(Resource.Loading)
+    fun getResourceState(): StateFlow<Resource<List<MonumentVO>, String>> = resourceStateFlow.asStateFlow()
 
     init {
         getFavMonuments()
@@ -30,21 +29,19 @@ class FavoritesViewModel @Inject constructor(private val getFavoriteMonumentsUse
 
     fun getFavMonuments() {
         viewModelScope.launch {
-            resourceLiveData.value = Resource.Loading
+            resourceStateFlow.value = Resource.Loading
 
             try {
                 val result = getFavoriteMonumentsUseCase()
                 val monumentListVO = result?.map { monument: MonumentBO -> MonumentMapper.mapMonumentBoToVo(monument) }
 
                 if (!result.isNullOrEmpty()) {
-                    favMonumentsMutableLiveData.postValue(monumentListVO)
-                    resourceLiveData.postValue(Resource.Success(monumentListVO as List<MonumentVO>))
+                    resourceStateFlow.value = Resource.Success(monumentListVO as List<MonumentVO>)
                 } else {
-                    favMonumentsMutableLiveData.postValue(emptyList())
-                    resourceLiveData.postValue(Resource.Error(ERROR_FAVORITES_FOUND))
+                    resourceStateFlow.value = Resource.Error(ERROR_FAVORITES_FOUND)
                 }
             } catch (e: Exception) {
-                resourceLiveData.postValue(Resource.Error(ERROR_LOADING_FAVORITES))
+                resourceStateFlow.value = Resource.Error(ERROR_LOADING_FAVORITES)
             }
         }
     }

@@ -17,6 +17,8 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.practica5.home.R
 import com.example.practica5.common.util.MonumentsConstant.EMAIL_SUBJECT
@@ -24,6 +26,7 @@ import com.example.practica5.common.util.MonumentsConstant.MONUMENT_TARGET
 import com.example.practica5.home.databinding.FragmentWebMonumentBinding
 import com.example.practica5.home.ui.viewmodel.WebMonumentViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class WebMonumentFragment : Fragment() {
@@ -41,11 +44,16 @@ class WebMonumentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        webMonumentViewModel.getWebMonument().observe(viewLifecycleOwner) { monument ->
-            if (monument != null) {
-                initWebView()
-                binding.webMonumentToolbar.title = monument.name
-                initToolbarMenu(monument)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                webMonumentViewModel.getWebMonument().collect { monument ->
+                    if (monument != null) {
+                        initWebView()
+                        binding.webMonumentToolbar.title = monument.name
+                        initToolbarMenu(monument)
+                    }
+                }
             }
         }
     }

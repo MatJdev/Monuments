@@ -1,19 +1,20 @@
 package com.example.practica5.home.ui.viewmodel
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.practica5.model.vo.MonumentVO
 import com.example.practica5.common.util.MonumentsConstant.EMPTY_INFO
 import com.example.practica5.home.R
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class WebMonumentViewModel : ViewModel() {
-    private val webMonumentLiveData = MutableLiveData<MonumentVO?>(null)
-    fun getWebMonument(): LiveData<MonumentVO?> = webMonumentLiveData
+    private val webMonumentLiveData = MutableStateFlow<MonumentVO?>(null)
+    fun getWebMonument(): StateFlow<MonumentVO?> = webMonumentLiveData.asStateFlow()
 
     fun loadMonument(monument: MonumentVO) {
-        webMonumentLiveData.postValue(monument)
+        webMonumentLiveData.value = monument
     }
 
     fun getWebUrl(context: Context): String {

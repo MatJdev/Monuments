@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.practica5.home.R
 import com.example.practica5.common.util.MonumentsConstant.DELETE_DIALOG_TAG
@@ -24,6 +27,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DetailFragment : Fragment(), OnMapReadyCallback, DeleteMonumentDialogFragment.DeleteMonumentDialogListener {
@@ -46,9 +50,15 @@ class DetailFragment : Fragment(), OnMapReadyCallback, DeleteMonumentDialogFragm
         initToolbar()
         webMonumentViewModel.clearLiveData()
 
-        detailViewModel.getMonument().observe(viewLifecycleOwner) { monument ->
-            binding.renderMonument(monument, adapter)
-            initListener(monument)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                detailViewModel.getMonument().collect { monument ->
+                    monument?.let {
+                        binding.renderMonument(monument, adapter)
+                        initListener(it)
+                    }
+                }
+            }
         }
 
         with(binding) {
@@ -57,16 +67,24 @@ class DetailFragment : Fragment(), OnMapReadyCallback, DeleteMonumentDialogFragm
             mapView.getMapAsync(this@DetailFragment)
         }
 
-        webMonumentViewModel.getWebMonument().observe(viewLifecycleOwner) { monument ->
-            if (monument != null) {
-                findNavController().navigate(R.id.action_detailFragment_to_webMonumentFragment)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                webMonumentViewModel.getWebMonument().collect { monument ->
+                    if (monument != null) {
+                        findNavController().navigate(R.id.action_detailFragment_to_webMonumentFragment)
+                    }
+                }
             }
         }
 
-        detailViewModel.getRemoveComplete().observe(viewLifecycleOwner) { isComplete ->
-            if (isComplete) {
-                detailViewModel.setDeleteToFalse()
-                findNavController().navigate(R.id.action_detailFragment_to_nav_my_monuments)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                detailViewModel.getRemoveComplete().collect { isComplete ->
+                    if (isComplete) {
+                        detailViewModel.setDeleteToFalse()
+                        findNavController().navigate(R.id.action_detailFragment_to_nav_my_monuments)
+                    }
+                }
             }
         }
     }

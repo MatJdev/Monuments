@@ -17,10 +17,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.practica5.common.Resource
@@ -84,9 +86,26 @@ class MonumentsFragment : Fragment() {
         }
         toolbar?.title = MONUMENTS_TITLE
 
-        monumentsViewModel.getMonumentsList().observe(viewLifecycleOwner) { monuments ->
-            adapter.submitList(monuments) { scrollToFirstPosition() }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                monumentsViewModel.getResourceState().collect { resource ->
+                    with(binding) {
+                        when(resource) {
+                            is Resource.Loading -> monumentsProgressBar.isVisible = true
+                            is Resource.Success -> {
+                                monumentsProgressBar.isVisible = false
+                                adapter.submitList(resource.data)
+                            }
+                            is Resource.Error -> {
+                                monumentsProgressBar.isVisible = false
+                                showErrorDialog(resource.error)
+                            }
+                        }
+                    }
+                }
+            }
         }
+
         initToolbarMenu()
         with(binding) {
             monumentsFab.setOnClickListener {
@@ -98,19 +117,6 @@ class MonumentsFragment : Fragment() {
             monumentsViewModel.getAllMonuments()
         }
         findNavController().addOnDestinationChangedListener(destinationChangedListener)
-
-        monumentsViewModel.getResourceState().observe(viewLifecycleOwner) { resource ->
-            with(binding) {
-                when (resource) {
-                    is Resource.Loading -> monumentsProgressBar.visibility = View.VISIBLE
-                    is Resource.Success -> monumentsProgressBar.visibility = View.GONE
-                    is Resource.Error -> {
-                        monumentsProgressBar.visibility = View.GONE
-                        showErrorDialog(resource.error)
-                    }
-                }
-            }
-        }
     }
 
     private fun onFavoriteSelected(monument: MonumentVO) {

@@ -9,9 +9,13 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.practica5.mymonuments.R
@@ -31,6 +35,7 @@ import com.example.practica5.mymonuments.ui.adapter.MyMonumentsAdapter
 import com.example.practica5.mymonuments.ui.viewmodel.MyMonumentsViewModel
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MyMonumentsFragment : Fragment() {
@@ -65,26 +70,27 @@ class MyMonumentsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        myMonumentsViewModel.getMyMonumentsList().observe(viewLifecycleOwner) { monuments ->
-            adapter.submitList(monuments)
-            if (monuments != null) {
-                setVisibilityUi(monuments)
-            }
-        }
-
         val destinationChangedListener = NavController.OnDestinationChangedListener { _, _, _ ->
             myMonumentsViewModel.getMyMonuments()
         }
         findNavController().addOnDestinationChangedListener(destinationChangedListener)
 
-        myMonumentsViewModel.getResourceState().observe(viewLifecycleOwner) { resource ->
-            with(binding) {
-                when(resource) {
-                    is Resource.Loading -> myMonumentsProgressBar.visibility = View.VISIBLE
-                    is Resource.Success -> myMonumentsProgressBar.visibility = View.GONE
-                    is Resource.Error -> {
-                        myMonumentsProgressBar.visibility = View.GONE
-                        showErrorDialog(resource.error)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                myMonumentsViewModel.getResourceState().collect { resource ->
+                    with(binding) {
+                        when(resource) {
+                            is Resource.Loading -> myMonumentsProgressBar.isVisible = true
+                            is Resource.Success -> {
+                                myMonumentsProgressBar.isVisible = false
+                                adapter.submitList(resource.data)
+                                setVisibilityUi(resource.data)
+                            }
+                            is Resource.Error -> {
+                                myMonumentsProgressBar.isVisible = false
+                                showErrorDialog(resource.error)
+                            }
+                        }
                     }
                 }
             }

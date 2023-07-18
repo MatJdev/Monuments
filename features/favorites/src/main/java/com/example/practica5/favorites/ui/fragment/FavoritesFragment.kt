@@ -9,9 +9,13 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.practica5.favorites.R
@@ -25,7 +29,9 @@ import com.example.practica5.commonfeatures.util.ToolbarVisibilityListener
 import com.example.practica5.favorites.databinding.FragmentFavoritesBinding
 import com.example.practica5.favorites.ui.viewmodel.FavoritesViewModel
 import com.example.practica5.commonfeatures.viewmodel.DetailViewModel
+import com.example.practica5.model.vo.MonumentVO
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FavoritesFragment : Fragment() {
@@ -58,26 +64,27 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        favoritesViewModel.getFavMonumentsList().observe(viewLifecycleOwner) { monuments ->
-            adapter.submitList(monuments)
-            if (monuments != null) {
-                setVisibilityUi(monuments)
-            }
-        }
-
         val destinationChangedListener = NavController.OnDestinationChangedListener { _, _, _ ->
             favoritesViewModel.getFavMonuments()
         }
         findNavController().addOnDestinationChangedListener(destinationChangedListener)
 
-        favoritesViewModel.getResourceState().observe(viewLifecycleOwner) { resource ->
-            with(binding) {
-                when(resource) {
-                    is Resource.Loading -> favoritesProgressBar.visibility = View.VISIBLE
-                    is Resource.Success -> favoritesProgressBar.visibility = View.GONE
-                    is Resource.Error -> {
-                        favoritesProgressBar.visibility = View.GONE
-                        showErrorDialog(resource.error)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                favoritesViewModel.getResourceState().collect { resource ->
+                    with(binding) {
+                        when(resource) {
+                            is Resource.Loading -> favoritesProgressBar.isVisible = true
+                            is Resource.Success -> {
+                                favoritesProgressBar.isVisible = false
+                                adapter.submitList(resource.data)
+                                setVisibilityUi(resource.data)
+                            }
+                            is Resource.Error -> {
+                                favoritesProgressBar.isVisible = false
+                                showErrorDialog(resource.error)
+                            }
+                        }
                     }
                 }
             }
@@ -97,12 +104,12 @@ class FavoritesFragment : Fragment() {
         binding.favoritesList.adapter = adapter
     }
 
-    private fun onClickItemSelected(monument: com.example.practica5.model.vo.MonumentVO) {
+    private fun onClickItemSelected(monument: MonumentVO) {
         detailViewModel.loadData(monument)
         findNavController().navigate(R.id.action_favFragment_to_detailFragment)
     }
 
-    private fun setVisibilityUi(monuments: List<com.example.practica5.model.vo.MonumentVO>) = with(binding) {
+    private fun setVisibilityUi(monuments: List<MonumentVO>) = with(binding) {
         if (monuments.isEmpty()) {
             showViews(favoritesImgLogo, favoritesLabelWithoutFavorites)
 
