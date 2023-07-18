@@ -1,7 +1,5 @@
 package com.example.practica5.commonfeatures.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.practica5.common.Resource
@@ -21,6 +19,9 @@ import com.example.practica5.commonfeatures.domain.UpdateFavoriteMonumentUseCase
 import com.example.practica5.model.bo.monument.MonumentBO
 import com.example.practica5.model.vo.MonumentVO
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,11 +34,8 @@ class MonumentsViewModel @Inject constructor(
     private val getFilteredMonumentsByCountryUseCase: GetFilteredMonumentsByCountryUseCase
 ) : ViewModel() {
 
-    private val monumentsMutableLiveData = MutableLiveData<List<MonumentVO>?>()
-    fun getMonumentsList(): LiveData<List<MonumentVO>?> = monumentsMutableLiveData
-
-    private val resourceLiveData = MutableLiveData<Resource<List<MonumentVO>, String>>()
-    fun getResourceState(): LiveData<Resource<List<MonumentVO>, String>> = resourceLiveData
+    private val resourceStateFlow = MutableStateFlow<Resource<List<MonumentVO>, String>>(Resource.Loading)
+    fun getResourceState(): StateFlow<Resource<List<MonumentVO>, String>> = resourceStateFlow.asStateFlow()
 
     init {
         getAllMonuments()
@@ -45,16 +43,15 @@ class MonumentsViewModel @Inject constructor(
 
     fun getAllMonuments() {
         viewModelScope.launch {
-            resourceLiveData.value = Resource.Loading
+            resourceStateFlow.value = Resource.Loading
             try {
                 val result = getMonumentsUseCase.getMonuments()
                 val resultVO: List<MonumentVO> = result.map { MonumentMapper.mapMonumentBoToVo(it) }
                 if (result.isNotEmpty()) {
-                    monumentsMutableLiveData.postValue(resultVO)
-                    resourceLiveData.value = Resource.Success(resultVO)
+                    resourceStateFlow.value = Resource.Success(resultVO)
                 }
             } catch (e: Exception) {
-                resourceLiveData.value = Resource.Error(ERROR_LOADING_MONUMENTS)
+                resourceStateFlow.value = Resource.Error(ERROR_LOADING_MONUMENTS)
             }
         }
     }
@@ -68,7 +65,7 @@ class MonumentsViewModel @Inject constructor(
 
     fun getSortedMonuments(sortMode: String) {
         viewModelScope.launch {
-            resourceLiveData.value = Resource.Loading
+            resourceStateFlow.value = Resource.Loading
             try {
                 val monumentsOrdered = when (sortMode) {
                     MONUMENT_ID -> getMonumentsOrderedUseCase(OrderBy.ID)
@@ -77,10 +74,9 @@ class MonumentsViewModel @Inject constructor(
                     SORTED_EAST_WEST -> getMonumentsOrderedUseCase(OrderBy.LONGITUDE)
                     else -> getMonumentsOrderedUseCase(OrderBy.ID)
                 }
-                resourceLiveData.value = Resource.Success(monumentsOrdered.map { MonumentMapper.mapMonumentBoToVo(it) })
-                monumentsMutableLiveData.value = monumentsOrdered.map { MonumentMapper.mapMonumentBoToVo(it) }
+                resourceStateFlow.value = Resource.Success(monumentsOrdered.map { MonumentMapper.mapMonumentBoToVo(it) })
             } catch (e: Exception) {
-                resourceLiveData.value = Resource.Error(ERROR_LOADING_MONUMENTS)
+                resourceStateFlow.value = Resource.Error(ERROR_LOADING_MONUMENTS)
             }
         }
     }
@@ -94,26 +90,27 @@ class MonumentsViewModel @Inject constructor(
 
     fun getFilteredMonumentsByCountry(country: String) {
         viewModelScope.launch {
-            resourceLiveData.value = Resource.Loading
+            resourceStateFlow.value = Resource.Loading
             try {
                 if (country == ALL_COUNTRIES) {
                     getAllMonuments()
                 } else {
                     val filteredMonuments = getFilteredMonumentsByCountryUseCase.invoke()
-                    resourceLiveData.value = Resource.Success(filteredMonuments.map { monument: MonumentBO ->
+                    resourceStateFlow.value = Resource.Success(filteredMonuments.map { monument: MonumentBO ->
                         MonumentMapper.mapMonumentBoToVo(monument)
                     })
-                    monumentsMutableLiveData.value =
-                        filteredMonuments.map { monument: MonumentBO -> MonumentMapper.mapMonumentBoToVo(monument) }
                 }
             } catch (e: Exception) {
-                resourceLiveData.value = Resource.Error(ERROR_LOADING_MONUMENTS)
+                resourceStateFlow.value = Resource.Error(ERROR_LOADING_MONUMENTS)
             }
         }
     }
 
     fun getMonumentByTitle(title: String): MonumentVO? {
-        return getMonumentsList().value?.find { monument -> monument.name == title }
+        return getResourceState().value
+            .takeIf { it is Resource.Success }
+            .let { (it as? Resource.Success)?.data }
+            ?.find { monument -> monument.name == title }
     }
 
     fun updateCountrySelected(newCountry: String) {

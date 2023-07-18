@@ -20,6 +20,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.practica5.common.Resource
 import com.example.practica5.map.R
 import com.example.practica5.model.vo.MonumentVO
 import com.example.practica5.map.ui.adapter.CustomInfoWindowAdapter
@@ -191,7 +192,12 @@ class MapsFragment : Fragment() {
         val monumentsViewModel: MonumentsViewModel by activityViewModels {
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
         }
-        return monumentsViewModel.getMonumentsList().value.orEmpty()
+        val resourceState = monumentsViewModel.getResourceState().value
+        return if (resourceState is Resource.Success) {
+            resourceState.data
+        } else {
+            emptyList()
+        }
     }
 
     private fun setupMapListeners() {
